@@ -6,5 +6,5 @@
 ***
 
 #### Projekt je razvijen u sklopu diplomskog rada Mogućnosti prepoznavanja govora korištenjem biblioteke SpeechRecognition.
-Mentor: prof. Goran Igaly
+Mentor: prof. Goran Igaly <br>
 PMF ZG, Računarstvo i matematika, 20./21.
