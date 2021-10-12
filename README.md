@@ -1,0 +1,2 @@
+# Skripta
+(Tran)skripta
