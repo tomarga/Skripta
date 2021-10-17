@@ -14,7 +14,7 @@ if __name__ == "__main__":
     window = QtWidgets.QMainWindow()
     window.setWindowTitle("Skripta")
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap("resources/favicon.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+    icon.addPixmap(QtGui.QPixmap("./resources/favicon.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
     window.setWindowIcon(icon)
     window.setFixedSize(800, 800)
     window.setCentralWidget(MainWidget)
