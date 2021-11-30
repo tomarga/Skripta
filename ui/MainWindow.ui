@@ -36,48 +36,30 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget #MainWidget {
-	background-color: rgb(62, 62, 62)
+	background-image: url(&quot;images:main-window.png&quot;);
+	background-attachment:  fixed;
 }</string>
   </property>
-  <widget class="QLabel" name="BackgroundLabel">
-   <property name="geometry">
-    <rect>
-     <x>-10</x>
-     <y>0</y>
-     <width>811</width>
-     <height>801</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>resources/main-window.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QPushButton" name="RecordButton">
    <property name="geometry">
     <rect>
-     <x>194</x>
+     <x>200</x>
      <y>120</y>
      <width>183</width>
      <height>183</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QPushButton {
+    <string notr="true">QPushButton#RecordButton{
 	border-radius: 91px;
 	background:  rgb(84, 164, 166);
 }
 
-QPushButton:hover {
+QPushButton#RecordButton:hover {
     background: #63C2C4;
 }
 
-QPushButton:pressed {
+QPushButton#RecordButton:pressed {
     background: #63C2C4;
 	border: 3px solid white;
 }
@@ -88,7 +70,13 @@ QPushButton:pressed {
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>resources/mic.png</normaloff>resources/mic.png</iconset>
+     <normaloff>../resources/icons/mic.png</normaloff>../resources/icons/mic.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>140</width>
+     <height>140</height>
+    </size>
    </property>
    <property name="checkable">
     <bool>true</bool>
@@ -97,23 +85,23 @@ QPushButton:pressed {
   <widget class="QPushButton" name="LoadButton">
    <property name="geometry">
     <rect>
-     <x>414</x>
-     <y>483</y>
+     <x>417</x>
+     <y>481</y>
      <width>183</width>
      <height>183</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QPushButton {
+    <string notr="true">QPushButton#LoadButton {
 	border-radius: 91px;
 	background: #9C8ABF;
 }
 
-QPushButton:hover {
+QPushButton#LoadButton:hover {
     background: #B8A2E1;
 }
 
-QPushButton:pressed {
+QPushButton#LoadButton:pressed {
     background: #B8A2E1;
 	border: 3px solid white;
 }
@@ -124,12 +112,20 @@ QPushButton:pressed {
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>resources/audio.png</normaloff>resources/audio.png</iconset>
+     <normaloff>../resources/icons/audio.png</normaloff>../resources/icons/audio.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>150</width>
+     <height>150</height>
+    </size>
    </property>
    <property name="checkable">
     <bool>true</bool>
    </property>
   </widget>
+  <zorder>LoadButton</zorder>
+  <zorder>RecordButton</zorder>
  </widget>
  <resources/>
  <connections/>
