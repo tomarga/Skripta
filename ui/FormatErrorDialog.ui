@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UnsupportedFormatDialog</class>
+ <widget class="QDialog" name="UnsupportedFormatDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>200</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Greška</string>
+  </property>
+  <property name="accessibleName">
+   <string/>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog#UnsupportedFormatDialog {
+	background-color: rgb(84, 84, 84)
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="InvalidFormatLabel">
+     <property name="styleSheet">
+      <string notr="true">QLabel#InvalidFormatLabel {
+	color: white;
+	font-size: 16px;
+}</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Izabrana datoteka nije među podržanim formatima:&lt;br&gt;
+WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="OKButton">
+     <property name="styleSheet">
+      <string notr="true">QPushButton#OKButton {
+	margin-left: 160px;
+	margin-right: 160px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+	border-radius: 6px;
+	border: 3px solid #54a4a6;
+
+	font-weight: 600;
+	font-size: 14px;
+	color: white;
+}
+
+QPushButton#OKButton:hover {
+	border-color: #63C2C4;	
+}
+
+QPushButton#OKButton:pressed {
+	background-color: rgb(70, 70, 70)
+}</string>
+     </property>
+     <property name="text">
+      <string>U redu</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>OKButton</sender>
+   <signal>clicked()</signal>
+   <receiver>UnsupportedFormatDialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>169</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
