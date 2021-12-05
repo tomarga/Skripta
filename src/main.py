@@ -14,8 +14,8 @@ ROOT_DIRECTORY = Path(__file__).resolve().parent.parent
 
 def setupResources():
     # setup resources path shortcuts
-    QtCore.QDir.addSearchPath('icons', os.fspath(ROOT_DIRECTORY / "resources/icons"))
-    QtCore.QDir.addSearchPath('images', os.fspath(ROOT_DIRECTORY / "resources/images"))
+    QtCore.QDir.addSearchPath('icons', os.fspath(ROOT_DIRECTORY / "src/ui/resources/icons"))
+    QtCore.QDir.addSearchPath('images', os.fspath(ROOT_DIRECTORY / "src/ui/resources/images"))
 
 
 def setupUI(parentWidget):
