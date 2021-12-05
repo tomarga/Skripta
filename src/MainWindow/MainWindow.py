@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'ui/MainWindow.ui'
+# Form implementation generated from reading ui file 'src/MainWindow/MainWindow.ui'
 #
 # Created by: PyQt6 UI code generator 6.1.0
 #
@@ -41,7 +41,7 @@ class Ui_MainWidget(object):
 "")
         self.RecordButton.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("ui/resources/icons/mic.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap("../resources/icons/mic.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.RecordButton.setIcon(icon)
         self.RecordButton.setIconSize(QtCore.QSize(140, 140))
         self.RecordButton.setCheckable(True)
@@ -64,7 +64,7 @@ class Ui_MainWidget(object):
 "")
         self.LoadButton.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("ui/resources/icons/audio.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon1.addPixmap(QtGui.QPixmap("../resources/icons/audio.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.LoadButton.setIcon(icon1)
         self.LoadButton.setIconSize(QtCore.QSize(150, 150))
         self.LoadButton.setCheckable(True)
@@ -78,3 +78,13 @@ class Ui_MainWidget(object):
     def retranslateUi(self, MainWidget):
         _translate = QtCore.QCoreApplication.translate
         MainWidget.setWindowTitle(_translate("MainWidget", "Skripta"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWidget = QtWidgets.QWidget()
+    ui = Ui_MainWidget()
+    ui.setupUi(MainWidget)
+    MainWidget.show()
+    sys.exit(app.exec())

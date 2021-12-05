@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'ui/FormatErrorDialog.ui'
+# Form implementation generated from reading ui file 'src/FormatErrorDialog/FormatErrorDialog.ui'
 #
 # Created by: PyQt6 UI code generator 6.1.0
 #
@@ -61,3 +61,13 @@ class Ui_UnsupportedFormatDialog(object):
         self.InvalidFormatLabel.setText(_translate("UnsupportedFormatDialog", "<html><head/><body><p align=\"center\">Izabrana datoteka nije među podržanim formatima:<br>\n"
 "WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C.</p></body></html>"))
         self.OKButton.setText(_translate("UnsupportedFormatDialog", "U redu"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    UnsupportedFormatDialog = QtWidgets.QDialog()
+    ui = Ui_UnsupportedFormatDialog()
+    ui.setupUi(UnsupportedFormatDialog)
+    UnsupportedFormatDialog.show()
+    sys.exit(app.exec())

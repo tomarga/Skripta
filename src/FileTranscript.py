@@ -3,7 +3,7 @@ import os
 from PyQt6 import QtWidgets
 from pyogg import FlacFile
 from scipy.io import wavfile
-from src.UI_FormatErrorDialog import Ui_UnsupportedFormatDialog
+from src.FormatErrorDialog.FormatErrorDialog import Ui_UnsupportedFormatDialog
 
 
 # A class that takes the name of the file and creates a transcript out of it, if possible.

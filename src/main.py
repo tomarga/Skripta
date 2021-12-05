@@ -4,9 +4,9 @@ from pathlib import Path
 from PyQt6 import QtWidgets, QtGui, QtCore
 from PyQt6.QtWidgets import QFileDialog
 
-from UI_MainWindow import Ui_MainWidget
-from src.FileTranscript import FileTranscript
-from src.Util import Util
+from src.MainWindow.MainWindow import Ui_MainWidget
+from FileTranscript import FileTranscript
+from Util import Util
 
 # absolute path to app root dir
 ROOT_DIRECTORY = Path(__file__).resolve().parent.parent
@@ -14,9 +14,8 @@ ROOT_DIRECTORY = Path(__file__).resolve().parent.parent
 
 def setupResources():
     # setup resources path shortcuts
-    QtCore.QDir.addSearchPath('icons', os.fspath(ROOT_DIRECTORY / "src/ui/resources/icons"))
-    QtCore.QDir.addSearchPath('images', os.fspath(ROOT_DIRECTORY / "src/ui/resources/images"))
-
+    QtCore.QDir.addSearchPath('icons', os.fspath(ROOT_DIRECTORY / "resources/icons"))
+    QtCore.QDir.addSearchPath('images', os.fspath(ROOT_DIRECTORY / "resources/images"))
 
 def setupUI(parentWidget):
     ui.setupUi(parentWidget)

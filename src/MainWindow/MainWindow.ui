@@ -70,7 +70,7 @@ QPushButton#RecordButton:pressed {
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../resources/icons/mic.png</normaloff>../resources/icons/mic.png</iconset>
+     <normaloff>resources/icons/mic.png</normaloff>resources/icons/mic.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -112,7 +112,7 @@ QPushButton#LoadButton:pressed {
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../resources/icons/audio.png</normaloff>../resources/icons/audio.png</iconset>
+     <normaloff>resources/icons/audio.png</normaloff>resources/icons/audio.png</iconset>
    </property>
    <property name="iconSize">
     <size>
