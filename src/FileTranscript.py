@@ -6,17 +6,31 @@ from scipy.io import wavfile
 from src.FormatErrorDialog.FormatErrorDialog import Ui_UnsupportedFormatDialog
 
 
-# A class that takes the name of the file and creates a transcript out of it, if possible.
 class FileTranscript:
+    """
+    A class that takes the name of the file and handles its transcription.
+    """
 
     supportedExtensions = ('.wav', '.aiff', 'aifc', '.flac')
 
     def __init__(self, fileName, parentWidget):
+        """
+        Constructor method.
+        :param fileName: Name of the audio file that the user wants to transcribe.
+        :param parentWidget: Main Widget.
+        """
+
         self.fileName = fileName
         self.checkFileFormat(parentWidget)
 
-    # Checks if .wav file is in uncompressed (PCM/LPCM) format.
     def isLPCMFormat(self):
+        """
+        Checks if .wav file is in a format supported by the SpeechRecognition package.
+        :return:
+            <code>True</code> if the file is in uncompressed (PCM/LPCM) format
+            <code>False</code> otherwise
+        """
+
         try:
             # wavfile.read docs - "Return the sample rate (in samples/sec) and data from an LPCM WAV file."
             sampleRate, data = wavfile.read(self.fileName)
@@ -26,8 +40,13 @@ class FileTranscript:
         except:
             return False
 
-    # Checks if .flac file is in OGG container.
     def isOggFormat(self):
+        """
+        Checks if .flac file is in a format unsupported by the SpeechRecognition package.
+        :return:
+            <code>True</code> if the file s wrapped in OGG container
+            <code>False</code> otherwise
+        """
         try:
             # PyOgg docs - "Opens and reads an OGG-FLAC file to a buffer."
             flac = FlacFile(self.fileName)
@@ -37,8 +56,15 @@ class FileTranscript:
         except:
             return False
 
-    # Checks if selected file is in supported file format. If not, displays an error dialog.
     def checkFileFormat(self, parentWidget):
+        """
+        Checks if selected file is in supported file format.
+        Supported audio formats are:
+        WAV(must be in PCM/LPCM format), AIFF, AIFF-C and FLAC(OGG-FLAC is not supported).
+        If not, displays an error dialog with an appropriate message.
+        :param parentWidget: MainWidget
+        """
+
         # init format error dialog
         invalidFormatDialog = QtWidgets.QDialog(parentWidget)
         invalidFormatDialogUI = Ui_UnsupportedFormatDialog()
@@ -47,16 +73,10 @@ class FileTranscript:
         filename, fileExtension = os.path.splitext(self.fileName)
 
         if fileExtension == '.wav' and not self.isLPCMFormat():
-            # self.reformatFile()
             invalidFormatDialog.show()
 
         if fileExtension == '.flac' and self.isOggFormat():
-            # self.reformatFile()
             invalidFormatDialog.show()
 
         if fileExtension not in FileTranscript.supportedExtensions:
-            # self.reformatFile()
             invalidFormatDialog.show()
-
-    # def reformatFile(self):
-    #     return

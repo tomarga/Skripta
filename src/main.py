@@ -8,23 +8,36 @@ from src.MainWindow.MainWindow import Ui_MainWidget
 from FileTranscript import FileTranscript
 from Util import Util
 
-# absolute path to app root dir
+# Absolute path to app root dir
 ROOT_DIRECTORY = Path(__file__).resolve().parent.parent
 
 
 def setupResources():
-    # setup resources path shortcuts
+    """
+    Setups resources file shortcuts.
+    """
+
     QtCore.QDir.addSearchPath('icons', os.fspath(ROOT_DIRECTORY / "resources/icons"))
     QtCore.QDir.addSearchPath('images', os.fspath(ROOT_DIRECTORY / "resources/images"))
 
-def setupUI(parentWidget):
-    ui.setupUi(parentWidget)
 
-    # setup signals and slots
+def setupUI(parentWidget):
+    """
+    Setups UI and connects main buttons' signals to slots.
+    :param parentWidget: Main Widget
+    """
+
+    ui.setupUi(parentWidget)
     ui.LoadButton.clicked.connect(loadButtonClicked)
 
 
 def setupWindow(parentWidget):
+    """
+    Setups the title, favicon and size of the main window and connects it to parent widget.
+    :param parentWidget: Main Widget
+    :return: Created QMainWindow instance
+    """
+
     window = QtWidgets.QMainWindow()
     window.setWindowTitle("Skripta")
     icon = QtGui.QIcon()
@@ -35,12 +48,12 @@ def setupWindow(parentWidget):
     return window
 
 
-# handle file load
 def loadButtonClicked():
-    # Audio i Video verzija
-    # file = QFileDialog.getOpenFileName(self, 'Izaberi audio/video datoteku', str(Path.home()),
-    #                                            "Audio/Video files {}".format(Util.listExtensionsAsString(
-    #                                                 Ui_MainWidget.audioExtensions + Ui_MainWidget.videoExtensions)))
+    """
+    Slot method connected to 'Load Btn' option.
+    Opens a dialog for audio file selection and initializes an object to handle the file transcription.
+    """
+
     audioExtensions = tuple(Util.getExtensionsForType('audio'))
     file = QFileDialog.getOpenFileName(mainWidget, 'Izaberi audio datoteku', str(Path.home()),
                                        "Audio files {}".format(Util.listExtensionsAsString(audioExtensions)))
@@ -50,6 +63,10 @@ def loadButtonClicked():
 
 
 if __name__ == "__main__":
+    """
+    Main method: setups resources and user interface and starts the initial menu.
+    """
+
     import sys
 
     setupResources()
