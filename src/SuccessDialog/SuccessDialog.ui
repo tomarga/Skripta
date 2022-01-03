@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SuccessDialog</class>
+ <widget class="QDialog" name="SuccessDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>597</width>
+    <height>250</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Uspjeh</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../../../../resources/icons/error.png</normaloff>../../../../../../resources/icons/error.png</iconset>
+  </property>
+  <property name="accessibleName">
+   <string/>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog#SuccessDialog {
+	background-color: rgb(84, 84, 84)
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
+   <property name="spacing">
+    <number>45</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
+     <property name="spacing">
+      <number>4</number>
+     </property>
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMaximumSize</enum>
+     </property>
+     <property name="leftMargin">
+      <number>20</number>
+     </property>
+     <property name="topMargin">
+      <number>25</number>
+     </property>
+     <property name="rightMargin">
+      <number>50</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="SuccessIconLabel">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>../../resources/icons/success.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="SuccessMessageLabel">
+       <property name="styleSheet">
+        <string notr="true">QLabel#SuccessMessageLabel {
+	color: white;
+	font-size: 16px;
+}</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Audio datoteka je uspješno transkribirana!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>15</number>
+     </property>
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinimumSize</enum>
+     </property>
+     <item>
+      <widget class="QPushButton" name="OpenFileButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton#OpenFileButton {
+	margin-left: 100px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+	border-radius: 6px;
+	border: 3px solid #9C8ABF;
+
+	font-weight: 600;
+	font-size: 14px;
+	color: white;
+}
+
+QPushButton#OpenFileButton:hover {
+	border-color: #B8A2E1;	
+}
+
+QPushButton#OpenFileButton:pressed {
+	background-color: rgb(70, 70, 70)
+}</string>
+       </property>
+       <property name="text">
+        <string>Otvori</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="OKButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton#OKButton {
+	margin-right: 100px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+	border-radius: 6px;
+	border: 3px solid #54a4a6;
+
+	font-weight: 600;
+	font-size: 14px;
+	color: white;
+}
+
+QPushButton#OKButton:hover {
+	border-color: #63C2C4;	
+}
+
+QPushButton#OKButton:pressed {
+	background-color: rgb(70, 70, 70)
+}</string>
+       </property>
+       <property name="text">
+        <string>U redu</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>OKButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SuccessDialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>169</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
