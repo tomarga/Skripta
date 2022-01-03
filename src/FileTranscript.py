@@ -1,4 +1,4 @@
-import os
+import subprocess, os, platform
 from pathlib import Path
 
 import speech_recognition
@@ -38,12 +38,20 @@ class FileTranscript:
         self.invalidFormatDialog = QtWidgets.QDialog(self.parentWidget)
         self.initFormatErrorDialog()
 
+        self.failedTranscriptionDialog = QtWidgets.QDialog(self.parentWidget)
+        self.initFailedTranscriptionDialog()
+
         self.successDialog = QtWidgets.QDialog(self.parentWidget)
         self.initSuccessDialog()
 
-        if not self.checkFileFormat() or not self.createTranscript():
+        if not self.checkFileFormat():
             self.invalidFormatDialog.exec()
-        else:
+            return
+
+        self.resultFilePath = self.createTranscript()
+        if not self.resultFilePath:
+            self.failedTranscriptionDialog.exec()
+        elif self.resultFilePath != "canceled":
             self.successDialog.exec()
 
     def initFormatErrorDialog(self):
@@ -53,13 +61,27 @@ class FileTranscript:
         """
 
         invalidFormatMessage = "<html><head/><body><p align=\"center\">" \
-                               "Greška - potencijalno oštećena datoteka?<br>\n" \
                                "Provjerite je li datoteka u nekom od podržanih formata:<br>\n" \
                                "WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C." \
                                "</p></body></html>"
 
         invalidFormatDialogUI = Ui_ErrorDialog()
         invalidFormatDialogUI.setupUi(self.invalidFormatDialog, invalidFormatMessage)
+
+    def initFailedTranscriptionDialog(self):
+        """
+        Initializes Failed Transcription dialog with an appropriate message.
+        :return:
+        """
+
+        invalidFormatMessage = "<html><head/><body><p align=\"center\">" \
+                               "Greška pri procesiranju: oštećena ili nepodržana audio datoteka.<br>\n" \
+                               "Provjerite je li datoteka u nekom od podržanih formata:<br>\n" \
+                               "WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C." \
+                               "</p></body></html>"
+
+        invalidFormatDialogUI = Ui_ErrorDialog()
+        invalidFormatDialogUI.setupUi(self.failedTranscriptionDialog, invalidFormatMessage)
 
     def initSuccessDialog(self):
         """
@@ -126,6 +148,7 @@ class FileTranscript:
         """
         Creates transcript out of an audio file and saves the result in a new file.
         :return: A string containing path to newly made textual file, if successfull.
+                 "canceled" if the user cancels the process meanwhile.
                  An empty string, otherwise.
         """
 
@@ -148,16 +171,18 @@ class FileTranscript:
                 os.mkdir(transcriptsDirName)
 
             transcriptFile = QFileDialog.getSaveFileName( self.parentWidget,
-                "Spremi transkript kao", transcriptsDirName + "/Untitled.txt", Util.getTextualExtensions())
+                "Spremi transkript kao", transcriptsDirName + "/Novi_transkript.txt", Util.getTextualExtensions())
 
             if transcriptFile[0] and transcriptFile[1]:
                 with open(transcriptFile[0], 'w') as file:
                     file.write(resultData)
-                return transcriptFile
+                return transcriptFile[0]
 
         except speech_recognition.RequestError as e:
             print("RequestError - Transcription" + e.__str__())
+            return ""
         except speech_recognition.UnknownValueError as e:
             print("UnknownValueError - Transcription" + e.__str__())
+            return ""
 
-        return ""
+        return "canceled"
