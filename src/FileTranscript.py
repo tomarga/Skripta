@@ -91,6 +91,7 @@ class FileTranscript:
 
         successDialogUI = Ui_SuccessDialog()
         successDialogUI.setupUi(self.successDialog)
+        successDialogUI.OpenFileButton.clicked.connect(self.openTranscriptFile)
 
     def isLPCMFormat(self):
         """
@@ -186,3 +187,16 @@ class FileTranscript:
             return ""
 
         return "canceled"
+
+    def openTranscriptFile(self):
+        """
+        Opens the latest transcript file using its default application.
+        :return:
+        """
+
+        if platform.system() == 'Darwin':  # macOS
+            subprocess.call(('open', self.resultFilePath))
+        elif platform.system() == 'Windows':  # Windows
+            os.startfile(self.resultFilePath)
+        else:  # linux
+            subprocess.call(('xdg-open', self.resultFilePath))
