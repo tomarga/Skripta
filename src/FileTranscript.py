@@ -1,9 +1,18 @@
 import os
+from pathlib import Path
+
+import speech_recognition
+import speech_recognition as sr
 
 from PyQt6 import QtWidgets
 from pyogg import FlacFile
 from scipy.io import wavfile
-from src.FormatErrorDialog.FormatErrorDialog import Ui_UnsupportedFormatDialog
+
+from PyQt6.QtWidgets import QFileDialog
+
+from src.ErrorDialog.ErrorDialog import Ui_ErrorDialog
+from src.SuccessDialog.SuccessDialog import Ui_SuccessDialog
+from src.Util import Util
 
 
 class FileTranscript:
@@ -16,12 +25,50 @@ class FileTranscript:
     def __init__(self, fileName, parentWidget):
         """
         Constructor method.
+        Triggers transcript creation.
+        Displays the appropriate success/failure dialog when the transcription process is over.
+
         :param fileName: Name of the audio file that the user wants to transcribe.
         :param parentWidget: Main Widget.
         """
 
         self.fileName = fileName
-        self.checkFileFormat(parentWidget)
+        self.parentWidget = parentWidget
+
+        self.invalidFormatDialog = QtWidgets.QDialog(self.parentWidget)
+        self.initFormatErrorDialog()
+
+        self.successDialog = QtWidgets.QDialog(self.parentWidget)
+        self.initSuccessDialog()
+
+        if not self.checkFileFormat() or not self.createTranscript():
+            self.invalidFormatDialog.exec()
+        else:
+            self.successDialog.exec()
+
+    def initFormatErrorDialog(self):
+        """
+        Initializes Format Error dialog with an appropriate message.
+        :return:
+        """
+
+        invalidFormatMessage = "<html><head/><body><p align=\"center\">" \
+                               "Greška - potencijalno oštećena datoteka?<br>\n" \
+                               "Provjerite je li datoteka u nekom od podržanih formata:<br>\n" \
+                               "WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C." \
+                               "</p></body></html>"
+
+        invalidFormatDialogUI = Ui_ErrorDialog()
+        invalidFormatDialogUI.setupUi(self.invalidFormatDialog, invalidFormatMessage)
+
+    def initSuccessDialog(self):
+        """
+        Initializes Success dialog's ui.
+        :return:
+        """
+
+        successDialogUI = Ui_SuccessDialog()
+        successDialogUI.setupUi(self.successDialog)
 
     def isLPCMFormat(self):
         """
@@ -37,8 +84,6 @@ class FileTranscript:
             return True
         except ValueError as e:
             return False
-        except:
-            return False
 
     def isOggFormat(self):
         """
@@ -53,30 +98,66 @@ class FileTranscript:
             return True
         except ValueError as e:
             return False
-        except:
-            return False
 
-    def checkFileFormat(self, parentWidget):
+    def checkFileFormat(self):
         """
-        Checks if selected file is in supported file format.
+        Checks if selected file is in (Speech Recognition) supported file format.
         Supported audio formats are:
         WAV(must be in PCM/LPCM format), AIFF, AIFF-C and FLAC(OGG-FLAC is not supported).
-        If not, displays an error dialog with an appropriate message.
-        :param parentWidget: MainWidget
+        :return:
+            <code>True</code> if the file is supported
+            <code>False</code> otherwise
         """
-
-        # init format error dialog
-        invalidFormatDialog = QtWidgets.QDialog(parentWidget)
-        invalidFormatDialogUI = Ui_UnsupportedFormatDialog()
-        invalidFormatDialogUI.setupUi(invalidFormatDialog)
 
         filename, fileExtension = os.path.splitext(self.fileName)
 
         if fileExtension == '.wav' and not self.isLPCMFormat():
-            invalidFormatDialog.show()
+            return False
 
         if fileExtension == '.flac' and self.isOggFormat():
-            invalidFormatDialog.show()
+            return False
 
         if fileExtension not in FileTranscript.supportedExtensions:
-            invalidFormatDialog.show()
+            return False
+
+        return True
+
+    def createTranscript(self):
+        """
+        Creates transcript out of an audio file and saves the result in a new file.
+        :return: A string containing path to newly made textual file, if successfull.
+                 An empty string, otherwise.
+        """
+
+        recognizer = sr.Recognizer()
+        audioFile = sr.AudioFile(self.fileName)
+
+        try:
+            with audioFile as source:
+                audio = recognizer.record(source)
+        except ValueError as e:
+            print("ValueError - Audio as Source: " + e.__str__())
+            return ""
+
+        try:
+            resultData = recognizer.recognize_google(audio)
+            print(resultData)
+
+            transcriptsDirName = str(Path.home()) + "/Transkripti"
+            if not os.path.isdir(transcriptsDirName):
+                os.mkdir(transcriptsDirName)
+
+            transcriptFile = QFileDialog.getSaveFileName( self.parentWidget,
+                "Spremi transkript kao", transcriptsDirName + "/Untitled.txt", Util.getTextualExtensions())
+
+            if transcriptFile[0] and transcriptFile[1]:
+                with open(transcriptFile[0], 'w') as file:
+                    file.write(resultData)
+                return transcriptFile
+
+        except speech_recognition.RequestError as e:
+            print("RequestError - Transcription" + e.__str__())
+        except speech_recognition.UnknownValueError as e:
+            print("UnknownValueError - Transcription" + e.__str__())
+
+        return ""
