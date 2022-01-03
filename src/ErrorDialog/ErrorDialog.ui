@@ -1,47 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UnsupportedFormatDialog</class>
- <widget class="QDialog" name="UnsupportedFormatDialog">
+ <class>ErrorDialog</class>
+ <widget class="QDialog" name="ErrorDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>200</height>
+    <width>577</width>
+    <height>250</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Greška</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../resources/icons/error.png</normaloff>../../resources/icons/error.png</iconset>
+  </property>
   <property name="accessibleName">
    <string/>
   </property>
   <property name="styleSheet">
-   <string notr="true">QDialog#UnsupportedFormatDialog {
+   <string notr="true">QDialog#ErrorDialog {
 	background-color: rgb(84, 84, 84)
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="InvalidFormatLabel">
-     <property name="styleSheet">
-      <string notr="true">QLabel#InvalidFormatLabel {
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <property name="leftMargin">
+      <number>20</number>
+     </property>
+     <property name="rightMargin">
+      <number>20</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="ErrorIconLabel">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>../../resources/icons/error.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="ErrorMessageLabel">
+       <property name="styleSheet">
+        <string notr="true">QLabel#ErrorMessageLabel {
 	color: white;
 	font-size: 16px;
 }</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Izabrana datoteka nije među podržanim formatima:&lt;br&gt;
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Izabrana datoteka nije među podržanim formatima:&lt;br&gt;
 WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QPushButton" name="OKButton">
      <property name="styleSheet">
       <string notr="true">QPushButton#OKButton {
-	margin-left: 160px;
-	margin-right: 160px;
+	margin-left: 180px;
+	margin-right: 180px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 
@@ -73,7 +103,7 @@ QPushButton#OKButton:pressed {
   <connection>
    <sender>OKButton</sender>
    <signal>clicked()</signal>
-   <receiver>UnsupportedFormatDialog</receiver>
+   <receiver>ErrorDialog</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
