@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWidget</class>
- <widget class="QWidget" name="MainWidget">
+ <class>MenuWidget</class>
+ <widget class="QWidget" name="MenuWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -35,7 +35,7 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget #MainWidget {
+   <string notr="true">QWidget #MenuWidget {
 	background-image: url(&quot;images:main-window.png&quot;);
 	background-attachment:  fixed;
 }</string>

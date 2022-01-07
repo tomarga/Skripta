@@ -1,9 +1,9 @@
 import mimetypes
 
 
-class Util:
+class FileTypeUtil:
     """
-    Utility class, containing various helper methods.
+    Utility class, containing various helper methods regarding file types and corresponding extensions.
     """
 
     @staticmethod
@@ -38,11 +38,28 @@ class Util:
     @staticmethod
     def getTextualExtensions():
         """
-        Returns the string containing a selection of textual file extensions.".
-        The result format is customized to match the QFile's 'open/save file dialog' supported extensions' parameter.
+        Returns a string containing a selection of textual file extensions.
+        The result format is customized to match the QFile's 'get open/save file dialog' supported extensions' parameter.
         :return: A string like "(TypeName1 *ext1;;TypeName2 *ext2;; ... ;;TypeNameN *extn)".
         """
 
         return "All formats (*odt *docx *uot *xml *tex *txt *html);;" \
                "ODF Text Document (*odt);;Word 2007-365 (*docx);;Unified Office Format text (*uot);;Word 2003 XML " \
                "(*xml);;HTML (*html);;TeX (*tex);;Rich text (*rtf);; Text(*txt)"
+
+    @staticmethod
+    def getTextualExtensionsAsList():
+        """
+        Returns a list containing a selection of textual file extensions.
+        :return: A list with elements like "TypeName1 *ext1".
+        """
+
+        return FileTypeUtil.getTextualExtensions().split(';;')
+
+    @staticmethod
+    def getSupportedExtensions():
+        """
+        :return: A tuple containing all audio extensions that are supported by Speech Recognition library.
+        """
+
+        return ('.wav', '.aiff', 'aifc', '.flac')

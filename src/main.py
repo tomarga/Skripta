@@ -1,12 +1,13 @@
 import os
+import sys
 from pathlib import Path
 
-from PyQt6 import QtWidgets, QtGui, QtCore
-from PyQt6.QtWidgets import QFileDialog
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QApplication
 
-from src.MainWindow.MainWindow import Ui_MainWidget
-from FileTranscript import FileTranscript
-from Util import Util
+from src.View.View import View
+from src.Model.Model import Model
+from src.Controller.Controller import Controller
 
 # Absolute path to app root dir
 ROOT_DIRECTORY = Path(__file__).resolve().parent.parent
@@ -14,70 +15,27 @@ ROOT_DIRECTORY = Path(__file__).resolve().parent.parent
 
 def setupResources():
     """
-    Setups resources file shortcuts.
+    Setups resources' file shortcuts.
     """
 
     QtCore.QDir.addSearchPath('icons', os.fspath(ROOT_DIRECTORY / "resources/icons"))
     QtCore.QDir.addSearchPath('images', os.fspath(ROOT_DIRECTORY / "resources/images"))
 
 
-def setupUI(parentWidget):
+if __name__ == '__main__':
     """
-    Setups UI and connects main buttons' signals to slots.
-    :param parentWidget: Main Widget
-    """
-
-    ui.setupUi(parentWidget)
-    ui.LoadButton.clicked.connect(loadButtonClicked)
-
-
-def setupWindow(parentWidget):
-    """
-    Setups the title, favicon and size of the main window and connects it to parent widget.
-    :param parentWidget: Main Widget
-    :return: Created QMainWindow instance
+    Main function.
+    Connects the parts of MVC pattern and starts the app.
     """
 
-    window = QtWidgets.QMainWindow()
-    window.setWindowTitle("Skripta")
-    icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap("icons:favicon.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
-    window.setWindowIcon(icon)
-    window.setFixedSize(800, 800)
-    window.setCentralWidget(parentWidget)
-    return window
-
-
-def loadButtonClicked():
-    """
-    Slot method connected to 'Load Btn' option.
-    Opens a dialog for audio file selection and initializes an object to handle the file transcription.
-    """
-
-    audioExtensions = tuple(Util.getExtensionsForType('audio'))
-    file = QFileDialog.getOpenFileName(mainWidget, 'Izaberi audio datoteku', str(Path.home()),
-                                       "Audio files {}".format(Util.listExtensionsAsString(audioExtensions)))
-
-    if file[0] and file[1]:
-        fileTranscript = FileTranscript(file[0], mainWidget)
-
-
-if __name__ == "__main__":
-    """
-    Main method: setups resources and user interface and starts the initial menu.
-    """
-
-    import sys
+    app = QApplication(sys.argv)
 
     setupResources()
 
-    app = QtWidgets.QApplication(sys.argv)
-    mainWidget = QtWidgets.QWidget()
+    view = View()
+    model = Model()
+    controller = Controller(model, view)
 
-    ui = Ui_MainWidget()
-    setupUI(mainWidget)
-
-    appWindow = setupWindow(mainWidget)
-    appWindow.show()
+    view.mainWindow.show()
 
     sys.exit(app.exec())
