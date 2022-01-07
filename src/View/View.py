@@ -167,8 +167,6 @@ class View(QObject):
 
         if type == self.DialogTypes.PROCESSING:
             self.processingDialog.open()
-            self.mainWindow.setDisabled(True)
-            self.processingDialog.setDisabled(False)
 
         if type == self.DialogTypes.INVALID_FORMAT:
             self.invalidFormatDialog.open()
@@ -194,7 +192,6 @@ class View(QObject):
 
         if type == self.DialogTypes.PROCESSING:
             self.processingDialog.close()
-            self.mainWindow.setDisabled(False)
 
         if type == self.DialogTypes.INVALID_FORMAT:
             self.invalidFormatDialog.close()
