@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from scipy.io import wavfile
 from pyogg import FlacFile, PyOggError
@@ -75,3 +76,14 @@ class Model:
 
         except PyOggError as e:
             return False
+
+    @staticmethod
+    def createResultDirectory():
+        """
+        Creates a new HOME/Transkripti directory if it doesn't already exist.
+        :return:
+        """
+
+        dirPath = str(Path.home()) + "/Transkripti"
+        if not os.path.isdir(dirPath):
+            os.mkdir(dirPath)

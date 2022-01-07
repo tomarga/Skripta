@@ -88,6 +88,7 @@ class Controller:
 
         self.view.closeDialog(self.view.DialogTypes.PROCESSING)
 
+        self.model.createResultDirectory()
         self.view.openDialog(self.view.DialogTypes.FILE_SAVE)
 
     def handleFailure(self):
