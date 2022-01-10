@@ -13,7 +13,7 @@ from PyQt6.QtGui import QMovie
 class Ui_ProcessingDialog(object):
     def setupUi(self, ProcessingDialog):
         ProcessingDialog.setObjectName("ProcessingDialog")
-        ProcessingDialog.resize(577, 253)
+        ProcessingDialog.resize(577, 250)
         ProcessingDialog.setAccessibleName("")
         ProcessingDialog.setStyleSheet("QDialog#ProcessingDialog {\n"
 "    background-color: rgb(84, 84, 84)\n"

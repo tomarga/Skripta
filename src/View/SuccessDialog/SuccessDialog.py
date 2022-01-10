@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_SuccessDialog(object):
     def setupUi(self, SuccessDialog):
         SuccessDialog.setObjectName("SuccessDialog")
-        SuccessDialog.resize(597, 250)
+        SuccessDialog.resize(577, 250)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("src/SuccessDialog/../../../../../../resources/icons/error.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         SuccessDialog.setWindowIcon(icon)
