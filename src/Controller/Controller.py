@@ -56,18 +56,12 @@ class Controller:
     def startFileTranscription(self, filePath: str):
         """
         Slot that handles transcription from file.
-        First, it checks if the given filePath is valid.
         If the given filePath is empty, it does nothing.
-        If the file is not in any of supported audio formats, the appropriate info dialog is opened.
         Otherwise, the transcription process is started in a separate process.
         :return:
         """
 
         if not filePath:
-            return
-
-        if not self.model.checkFileFormat(filePath):
-            self.view.openDialog(self.view.DialogTypes.INVALID_FORMAT)
             return
 
         from src.main import ROOT_DIRECTORY
