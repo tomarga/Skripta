@@ -35,7 +35,7 @@ class Controller:
         """
 
         self.view.menuWidgetUI.LoadButton.clicked.connect(self.reset)
-        self.view.menuWidgetUI.LoadButton.clicked.connect(lambda: self.view.openDialog(self.view.DialogTypes.FILE_OPEN))
+        self.view.menuWidgetUI.LoadButton.clicked.connect(lambda: self.view.openDialog(self.view.DialogType.FILE_OPEN))
 
         self.view.selectFileDialog.fileSelected.connect(self.startFileTranscription)
 
@@ -43,15 +43,15 @@ class Controller:
         self.workerProcess.readyReadStandardError.connect(self.handleFailure)
 
         self.view.processingDialogUI.StopButton.clicked.connect(self.workerProcess.kill)
-        self.view.processingDialogUI.StopButton.clicked.connect(lambda: self.view.closeDialog(self.view.DialogTypes.PROCESSING))
+        self.view.processingDialogUI.StopButton.clicked.connect(lambda: self.view.closeDialog(self.view.DialogType.PROCESSING))
 
         self.view.processingDialog.rejected.connect(self.workerProcess.kill)
-        self.view.processingDialog.rejected.connect(lambda: self.view.closeDialog(self.view.DialogTypes.PROCESSING))
+        self.view.processingDialog.rejected.connect(lambda: self.view.closeDialog(self.view.DialogType.PROCESSING))
 
         self.view.saveFileDialog.fileSelected.connect(self.writeToFile)
 
         self.view.successDialogUI.OpenFileButton.clicked.connect(self.openNewFile)
-        self.view.successDialogUI.OpenFileButton.clicked.connect(lambda: self.view.closeDialog(self.view.DialogTypes.SUCCESS))
+        self.view.successDialogUI.OpenFileButton.clicked.connect(lambda: self.view.closeDialog(self.view.DialogType.SUCCESS))
 
     def startFileTranscription(self, filePath: str):
         """
@@ -67,7 +67,7 @@ class Controller:
         from src.main import ROOT_DIRECTORY
         self.workerProcess.start("python3", [ROOT_DIRECTORY.__str__() + "/src/Model/worker.py", filePath])
 
-        self.view.openDialog(self.view.DialogTypes.PROCESSING)
+        self.view.openDialog(self.view.DialogType.PROCESSING)
 
     def handleSuccess(self):
         """
@@ -80,10 +80,10 @@ class Controller:
         resultData = self.workerProcess.readAllStandardOutput()
         self.resultText = bytes(resultData).decode("utf8")
 
-        self.view.closeDialog(self.view.DialogTypes.PROCESSING)
+        self.view.closeDialog(self.view.DialogType.PROCESSING)
 
         self.model.createResultDirectory()
-        self.view.openDialog(self.view.DialogTypes.FILE_SAVE)
+        self.view.openDialog(self.view.DialogType.FILE_SAVE)
 
     def handleFailure(self):
         """
@@ -92,13 +92,29 @@ class Controller:
         :return:
         """
 
+        self.view.closeDialog(self.view.DialogType.PROCESSING)
+
         errorData = self.workerProcess.readAllStandardError()
         errorText = bytes(errorData).decode("utf8")
-        print(errorText)
+        # print(errorText)
 
-        self.view.closeDialog(self.view.DialogTypes.PROCESSING)
+        if "OSError" in errorText:
+            self.view.openDialog(self.view.DialogType.UNAUTHORISED)
 
-        self.view.openDialog(self.view.DialogTypes.FAILURE)
+        elif "UnknownValueError" in errorText:
+            self.view.openDialog(self.view.DialogType.DAMAGED_FILE)
+
+        elif "ValueError" in errorText:
+            self.view.openDialog(self.view.DialogType.INVALID_FORMAT)
+
+        elif "RequestError" in errorText:
+            self.view.openDialog(self.view.DialogType.FAILED_REQUEST)
+
+        elif "Timeout" in errorText:
+            self.view.openDialog(self.view.DialogType.TIMED_OUT)
+
+        else:
+            print('Undefined error.')
 
     def writeToFile(self, filePath: str):
         """
@@ -115,7 +131,7 @@ class Controller:
         with open(filePath, 'w') as file:
             file.write(self.resultText)
 
-        self.view.openDialog(self.view.DialogTypes.SUCCESS)
+        self.view.openDialog(self.view.DialogType.SUCCESS)
 
     def openNewFile(self):
         """

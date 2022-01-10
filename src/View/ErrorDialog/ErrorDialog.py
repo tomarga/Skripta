@@ -10,7 +10,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class Ui_ErrorDialog(object):
-    def setupUi(self, ErrorDialog, errorMessage):
+    def setupUi(self, ErrorDialog):
         ErrorDialog.setObjectName("ErrorDialog")
         ErrorDialog.resize(577, 250)
         icon = QtGui.QIcon()
@@ -24,7 +24,7 @@ class Ui_ErrorDialog(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(20, -1, 20, -1)
-        self.horizontalLayout.setSpacing(5)
+        self.horizontalLayout.setSpacing(1)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.ErrorIconLabel = QtWidgets.QLabel(ErrorDialog)
         self.ErrorIconLabel.setText("")
@@ -65,15 +65,19 @@ class Ui_ErrorDialog(object):
         self.OKButton.setObjectName("OKButton")
         self.verticalLayout.addWidget(self.OKButton)
 
-        self.retranslateUi(ErrorDialog, errorMessage)
+        self.retranslateUi(ErrorDialog)
         self.OKButton.clicked.connect(ErrorDialog.close)
         QtCore.QMetaObject.connectSlotsByName(ErrorDialog)
 
-    def retranslateUi(self, ErrorDialog, errorMessage):
+    def retranslateUi(self, ErrorDialog):
         _translate = QtCore.QCoreApplication.translate
         ErrorDialog.setWindowTitle(_translate("ErrorDialog", "Greška"))
-        self.ErrorMessageLabel.setText(_translate("ErrorDialog", errorMessage))
+        self.ErrorMessageLabel.setText(_translate("ErrorDialog", "Greška"))
         self.OKButton.setText(_translate("ErrorDialog", "U redu"))
+
+    def setText(self, message):
+        _translate = QtCore.QCoreApplication.translate
+        self.ErrorMessageLabel.setText(_translate("ErrorDialog", message))
 
 
 if __name__ == "__main__":

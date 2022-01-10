@@ -20,16 +20,56 @@ class View(QObject):
     Handles application's UI elements.
     """
 
-    class DialogTypes(Enum):
+    class DialogType(Enum):
         """
         Utility Enumeration of all dialog types.
         """
         SUCCESS = 1
-        FAILURE = 2
+        FAILED_REQUEST = 2
         PROCESSING = 3
         INVALID_FORMAT = 4
-        FILE_OPEN = 5
-        FILE_SAVE = 6
+        DAMAGED_FILE = 5
+        FILE_OPEN = 6
+        FILE_SAVE = 7
+        TIMED_OUT = 8
+        UNAUTHORISED = 9
+
+        def getErrorMessage(self):
+            """
+            :return: Dialog's error message depending on the type of the error (in HTML).
+            """
+            if self == self.INVALID_FORMAT:
+                return "<html><head/><body><p align=\"center\">" \
+                       "Provjerite je li datoteka u nekom od podržanih formata:<br>\n" \
+                       "WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C." \
+                       "</p></body></html>"
+
+            if self == self.DAMAGED_FILE:
+                return "<html><head/><body><p align=\"center\" style=\"margin-right:105px;\">" \
+                       "Greška pri obradi govora: <br>\n datoteka sadrži nerazumljiv govor." \
+                       "</p></body></html>"
+
+            if self == self.FAILED_REQUEST:
+                return "<html><head/><body><p align=\"center\" style=\"margin-right:110px;\">" \
+                       "Greška pri obradi zahtjeva: <br>\n provjerite kvalitetu internet veze." \
+                       "</p></body></html>"
+
+            if self == self.TIMED_OUT:
+                return "<html><head/><body><p align=\"center\" style=\"margin-right:65px;\">" \
+                       "Greška pri obradi zahtjeva: <br>\n prekinuto zbog vremenskog ograničenja." \
+                       "</p></body></html>"
+
+            if self == self.UNAUTHORISED:
+                return "<html><head/><body><p align=\"center\" style=\"margin-right:35px;\">" \
+                       "Greška pri obradi zahtjeva: neodobren pristup." \
+                       "</p></body></html>"
+
+        def isErrorDialog(self):
+            """
+            :return: True for error dialog types, False otherwise.
+            """
+
+            return self in [self.FAILED_REQUEST, self.DAMAGED_FILE, self.INVALID_FORMAT, self.TIMED_OUT, self.UNAUTHORISED]
 
     def __init__(self):
         """
@@ -45,17 +85,14 @@ class View(QObject):
         self.mainWindow = MainWindow()
         self.mainWindow.setCentralWidget(self.menuWidget)
 
-        self.invalidFormatDialog = QtWidgets.QDialog(self.mainWindow)
-        self.invalidFormatDialogUI = self.initFormatErrorDialogUI()
-
         self.processingDialog = QtWidgets.QDialog(self.mainWindow)
         self.processingDialogUI = self.initProcessingDialogUI()
 
-        self.failedTranscriptionDialog = QtWidgets.QDialog(self.mainWindow)
-        self.failedTranscriptionDialogUI = self.initFailedTranscriptionDialogUI()
-
         self.successDialog = QtWidgets.QDialog(self.mainWindow)
         self.successDialogUI = self.initSuccessDialogUI()
+
+        self.errorDialog = QtWidgets.QDialog(self.mainWindow)
+        self.errorDialogUI = self.initErrorDialogUI()
 
         self.selectFileDialog = self.initSelectFileDialog()
         self.saveFileDialog = self.initSaveFileDialog()
@@ -100,36 +137,15 @@ class View(QObject):
 
         return fileDialog
 
-    def initFormatErrorDialogUI(self):
+    def initErrorDialogUI(self):
         """
-        Initializes Format Error dialog with an appropriate message.
+        Initializes Error dialog's UI.
         :return: Created instance of Ui_ErrorDialog.
         """
 
-        invalidFormatMessage = "<html><head/><body><p align=\"center\">" \
-                               "Provjerite je li datoteka u nekom od podržanih formata:<br>\n" \
-                               "WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C." \
-                               "</p></body></html>"
-
-        invalidFormatDialogUI = Ui_ErrorDialog()
-        invalidFormatDialogUI.setupUi(self.invalidFormatDialog, invalidFormatMessage)
-        return invalidFormatDialogUI
-
-    def initFailedTranscriptionDialogUI(self):
-        """
-        Initializes Failed Transcription dialog with an appropriate message.
-        :return: Created instance of Ui_ErrorDialog.
-        """
-
-        failedTranscriptionMessage = "<html><head/><body><p align=\"center\">" \
-                                     "Greška pri obradi: oštećena ili nepodržana audio datoteka.<br>\n" \
-                                     "Provjerite je li datoteka u nekom od podržanih formata:<br>\n" \
-                                     "WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C." \
-                                     "</p></body></html>"
-
-        failedTranscriptionUI = Ui_ErrorDialog()
-        failedTranscriptionUI.setupUi(self.failedTranscriptionDialog, failedTranscriptionMessage)
-        return failedTranscriptionUI
+        errorDialogUI = Ui_ErrorDialog()
+        errorDialogUI.setupUi(self.errorDialog)
+        return errorDialogUI
 
     def initProcessingDialogUI(self):
         """
@@ -151,55 +167,50 @@ class View(QObject):
         successDialogUI.setupUi(self.successDialog)
         return successDialogUI
 
-    def openDialog(self, type: DialogTypes):
+    def openDialog(self, type: DialogType):
         """
-        Opens a dialog of specified type.
-        In case of the processing dialog exceptionally, the main window is disabled.
+        Opens a dialog of specified type as a modal.
+        For error typed dialogs, the error message is updated with appropriate message beforehand.
         :param type: Any member of DialogType enumeration.
         :return:
         """
 
-        if type == self.DialogTypes.SUCCESS:
+        if type.isErrorDialog():
+            self.errorDialogUI.setText(type.getErrorMessage())
+            self.errorDialog.open()
+
+        if type == self.DialogType.SUCCESS:
             self.successDialog.open()
 
-        if type == self.DialogTypes.FAILURE:
-            self.failedTranscriptionDialog.open()
-
-        if type == self.DialogTypes.PROCESSING:
+        if type == self.DialogType.PROCESSING:
             self.processingDialog.open()
 
-        if type == self.DialogTypes.INVALID_FORMAT:
-            self.invalidFormatDialog.open()
-
-        if type == self.DialogTypes.FILE_OPEN:
+        if type == self.DialogType.FILE_OPEN:
             self.selectFileDialog.open()
 
-        if type == self.DialogTypes.FILE_SAVE:
+        if type == self.DialogType.FILE_SAVE:
             self.saveFileDialog.open()
 
-    def closeDialog(self, type: DialogTypes):
+    def closeDialog(self, type: DialogType):
         """
         Closes a dialog of specified type.
         :param type: Any member of DialogType enumeration.
         :return:
         """
 
-        if type == self.DialogTypes.SUCCESS:
+        if type.isErrorDialog():
+            self.errorDialog.close()
+
+        if type == self.DialogType.SUCCESS:
             self.successDialog.close()
 
-        if type == self.DialogTypes.FAILURE:
-            self.failedTranscriptionDialog.close()
-
-        if type == self.DialogTypes.PROCESSING:
+        if type == self.DialogType.PROCESSING:
             self.processingDialog.close()
-
-        if type == self.DialogTypes.INVALID_FORMAT:
-            self.invalidFormatDialog.close()
             
-        if type == self.DialogTypes.FILE_OPEN:
+        if type == self.DialogType.FILE_OPEN:
             self.selectFileDialog.close()
 
-        if type == self.DialogTypes.FILE_SAVE:
+        if type == self.DialogType.FILE_SAVE:
             self.saveFileDialog.close()
 
     def closeAllDialogs(self):
@@ -208,5 +219,5 @@ class View(QObject):
         :return:
         """
 
-        for type in self.DialogTypes:
+        for type in self.DialogType:
             self.closeDialog(type)
