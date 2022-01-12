@@ -1,7 +1,7 @@
 import argparse
 
-from EnergyThresholdOption import EnergyThresholdOption
-from API import API
+from src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
+from src.Model.Enums.API import API
 from Recognizer import Recognizer
 
 

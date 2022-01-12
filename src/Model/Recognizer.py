@@ -1,13 +1,12 @@
 import json
 import socket
 import sys
-from pathlib import Path
 
 import speech_recognition as sr
 from typing import Tuple, Union, Iterable, TextIO
 
-from EnergyThresholdOption import EnergyThresholdOption
-from API import API
+from src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
+from src.Model.Enums.API import API
 
 
 class Recognizer:
@@ -59,7 +58,7 @@ class Recognizer:
 
     def __init__(self, file: str, basicOptions: BasicOptions, apiOptions: APIOptions):
         """
-        Initialises a worker instance with given SR options.
+        Initializes a worker instance with given SR options.
         :param file: A path to audio file to transcribe.
         :param basicOptions: An instance of non-api related transcription options.
         :param apiOptions: An instance of api options class.
@@ -88,7 +87,7 @@ class Recognizer:
             recognizer.energy_threshold = self.basicOptions.energyValue
 
         if self.basicOptions.energyOption == EnergyThresholdOption.DYNAMIC:
-            recognizer.adjust_for_ambient_noise(source, 1)
+            recognizer.adjust_for_ambient_noise(source, 0.75)
 
     def run(self):
         """
@@ -99,6 +98,7 @@ class Recognizer:
         """
 
         audioFile = sr.AudioFile(self.file)
+
         recognizer = sr.Recognizer()
         recognizer.operation_timeout = 1800  # timeout after half an hour
 
@@ -114,10 +114,14 @@ class Recognizer:
             sys.stderr.write("ValueError - Audio as Source: " + e.__str__())
             return
 
+        except FileNotFoundError as e:
+            sys.stderr.write("FileNotFoundError - Audio as Source: " + e.__str__())
+            return
+
         env = None
         try:
-            rootDir = Path(__file__).resolve().parent.parent.parent
-            env = open(rootDir.__str__() + "/env.json", 'r')
+            from src.main import ROOT_DIRECTORY
+            env = open(ROOT_DIRECTORY.__str__() + "/env.json", 'r')
         except OSError as e:
             sys.stderr.write("OSError - env file: " + e.__str__())
 
