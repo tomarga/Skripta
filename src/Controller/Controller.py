@@ -1,7 +1,11 @@
 import os, subprocess, platform
+import datetime
+import time
 
-from PyQt6.QtCore import QProcess
+from PyQt6.QtCore import QProcess, QCoreApplication, QEvent, Qt
+from PyQt6.QtGui import QKeyEvent
 
+from src.View.Validators.DurationValidator import DurationValidator
 from src.View.View import View
 from src.Model.Model import Model
 
@@ -34,38 +38,133 @@ class Controller:
         :return:
         """
 
+        # main menu
         self.view.menuWidgetUI.LoadButton.clicked.connect(self.reset)
-        self.view.menuWidgetUI.LoadButton.clicked.connect(lambda: self.view.openDialog(self.view.DialogType.FILE_OPEN))
+        self.view.menuWidgetUI.LoadButton.clicked.connect(lambda: self.view.openDialog(self.view.DialogType.LOAD_OPTIONS))
 
-        self.view.selectFileDialog.fileSelected.connect(self.startFileTranscription)
+        # file input option
+        self.view.optionsDialogUI.browseFileButton.clicked.connect(lambda: self.view.openDialog(self.view.DialogType.FILE_OPEN))
+        self.view.selectFileDialog.fileSelected.connect(self.updateFileInputLine)
+        self.view.optionsDialogUI.fileLineEdit.editingFinished.connect(self.setMaxDuration)
+        self.view.optionsDialogUI.fileLineEdit.textChanged.connect(self.enableOKButton)
 
-        self.workerProcess.readyReadStandardOutput.connect(self.handleSuccess)
-        self.workerProcess.readyReadStandardError.connect(self.handleFailure)
+        # duration option
+        self.view.optionsDialogUI.FromLineEdit.editingFinished.connect(self.updateToValidator)
+        self.view.optionsDialogUI.ToLineEdit.editingFinished.connect(self.updateFromValidator)
 
+        # start transcription
+        self.view.optionsDialogUI.OKButton.clicked.connect(self.startFileTranscription)
+
+        # processing
         self.view.processingDialogUI.StopButton.clicked.connect(self.workerProcess.kill)
         self.view.processingDialogUI.StopButton.clicked.connect(lambda: self.view.closeDialog(self.view.DialogType.PROCESSING))
-
         self.view.processingDialog.rejected.connect(self.workerProcess.kill)
         self.view.processingDialog.rejected.connect(lambda: self.view.closeDialog(self.view.DialogType.PROCESSING))
 
+        # handle result
+        self.workerProcess.readyReadStandardOutput.connect(self.handleSuccess)
+        self.workerProcess.readyReadStandardError.connect(self.handleFailure)
         self.view.saveFileDialog.fileSelected.connect(self.writeToFile)
 
+        # success
         self.view.successDialogUI.OpenFileButton.clicked.connect(self.openNewFile)
         self.view.successDialogUI.OpenFileButton.clicked.connect(lambda: self.view.closeDialog(self.view.DialogType.SUCCESS))
 
-    def startFileTranscription(self, filePath: str):
+    def updateToValidator(self):
+        """
+        Updates 'To' line validator to check that duration is not lesser
+        than the one in 'From' input.
+        :return:
+        """
+
+        toValidator: DurationValidator = self.view.optionsDialogUI.ToLineEdit.validator()
+        toValidator.setMinInput(self.view.optionsDialogUI.FromLineEdit.text())
+
+    def updateFromValidator(self):
+        """
+        Updates 'From' line validator to check that duration is not greater
+        than the one in 'To' input.
+        :return:
+        """
+
+        fromValidator: DurationValidator = self.view.optionsDialogUI.FromLineEdit.validator()
+        fromValidator.setMaxInput(self.view.optionsDialogUI.ToLineEdit.text())
+
+    def updateFileInputLine(self, fileInput: str):
+        """
+        Sets the given text to file input line edit.
+        :param fileInput:
+        :return:
+        """
+
+        self.view.optionsDialogUI.fileLineEdit.setText(fileInput)
+
+        # mock 'enter' key press to trigger editFinished signal
+        self.view.optionsDialogUI.OKButton.setEnabled(False)
+        QCoreApplication.postEvent(self.view.optionsDialogUI.fileLineEdit,
+                                   QKeyEvent(QEvent.Type.KeyPress, Qt.Key.Key_Return, Qt.KeyboardModifier.NoModifier))
+        self.view.optionsDialogUI.OKButton.setEnabled(True)
+
+    def setMaxDuration(self):
+        """
+        Sets the default duration of file in 'From' and 'To' line edits
+        and setups their validation (the input cannot be longer than the max duration).
+        :return:
+        """
+
+        file = self.view.optionsDialogUI.fileLineEdit.text()
+        duration = self.model.getAudioDuration(file)
+
+        if duration is not None:
+            formattedDuration = time.strftime('%H:%M:%S', time.gmtime(duration))
+            self.view.optionsDialogUI.ToLineEdit.setText(formattedDuration)
+            self.view.optionsDialogUI.FromLineEdit.setText('00:00:00')
+
+            # update validators
+            fromValidator: DurationValidator = self.view.optionsDialogUI.FromLineEdit.validator()
+            fromValidator.setMaxInput(formattedDuration)
+
+            toValidator: DurationValidator = self.view.optionsDialogUI.ToLineEdit.validator()
+            toValidator.setMaxInput(formattedDuration)
+
+        else:
+            self.view.optionsDialogUI.ToLineEdit.setText(0)
+
+    def enableOKButton(self, fileInput: str):
+        """
+        Enables OK button if fileInput is not empty.
+        :param fileInput:
+        :return:
+        """
+
+        if fileInput.__len__():
+            self.view.optionsDialogUI.OKButton.setEnabled(True)
+        else:
+            self.view.optionsDialogUI.OKButton.setEnabled(False)
+
+    def startFileTranscription(self):
         """
         Slot that handles transcription from file.
-        If the given filePath is empty, it does nothing.
+        If the filePath selected in the options' dialog is empty, it does nothing.
         Otherwise, the transcription process is started in a separate process.
         :return:
         """
 
+        filePath = self.view.optionsDialogUI.fileLineEdit.text()
+
         if not filePath:
             return
 
+        # setup arguments
+        fromInput = self.view.optionsDialogUI.FromLineEdit.text()
+        offset = datetime.datetime.strptime(fromInput, '%H:%M:%S').second
+
+        toInput = self.view.optionsDialogUI.ToLineEdit.text()
+        to = datetime.datetime.strptime(toInput, '%H:%M:%S').second
+        duration = to - offset
+
         from src.main import ROOT_DIRECTORY
-        self.workerProcess.start("python3", [ROOT_DIRECTORY.__str__() + "/src/Model/worker.py", filePath])
+        self.workerProcess.start("python3", [ROOT_DIRECTORY.__str__() + "/src/Model/worker.py", filePath, '-o', offset.__str__(), '-d', duration.__str__()])
 
         self.view.openDialog(self.view.DialogType.PROCESSING)
 
@@ -113,6 +212,9 @@ class Controller:
         elif "Timeout" in errorText:
             self.view.openDialog(self.view.DialogType.TIMED_OUT)
 
+        elif "FileNotFoundError" in errorText:
+            self.view.openDialog(self.view.DialogType.FILE_NOT_FOUND)
+
         else:
             print('Undefined error.')
 
@@ -152,7 +254,11 @@ class Controller:
         Closes all dialogs and resets newFilePath and resultText attributes.
         :return:
         """
-        self.view.closeAllDialogs()
 
         self.newFilePath = ""
         self.resultText = ""
+
+        self.view.closeAllDialogs()
+        self.view.optionsDialogUI.fileLineEdit.clear()
+        self.view.optionsDialogUI.FromLineEdit.setText('00:00:00')
+        self.view.optionsDialogUI.ToLineEdit.setText('00:00:00')
