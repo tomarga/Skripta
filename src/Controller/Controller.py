@@ -5,6 +5,7 @@ import time
 from PyQt6.QtCore import QProcess, QCoreApplication, QEvent, Qt
 from PyQt6.QtGui import QKeyEvent
 
+from src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
 from src.View.Validators.DurationValidator import DurationValidator
 from src.View.View import View
 from src.Model.Model import Model
@@ -52,6 +53,9 @@ class Controller:
         self.view.optionsDialogUI.FromLineEdit.editingFinished.connect(self.updateToValidator)
         self.view.optionsDialogUI.ToLineEdit.editingFinished.connect(self.updateFromValidator)
 
+        # ambient noise option
+        self.view.optionsDialogUI.noiseTypeComboBox.currentTextChanged.connect(self.enableNoiseValue)
+
         # start transcription
         self.view.optionsDialogUI.OKButton.clicked.connect(self.startFileTranscription)
 
@@ -69,6 +73,18 @@ class Controller:
         # success
         self.view.successDialogUI.OpenFileButton.clicked.connect(self.openNewFile)
         self.view.successDialogUI.OpenFileButton.clicked.connect(lambda: self.view.closeDialog(self.view.DialogType.SUCCESS))
+
+    def enableNoiseValue(self, noiseType: str):
+        """
+        Enables noise value input if noise type parameter is set to 'Fiksan' or 'Hibridni'.
+        :param noiseType:
+        :return:
+        """
+
+        if noiseType == 'Dinamički':
+            self.view.optionsDialogUI.noiseValueLineEdit.setEnabled(False)
+        else:
+            self.view.optionsDialogUI.noiseValueLineEdit.setEnabled(True)
 
     def updateToValidator(self):
         """
@@ -156,15 +172,27 @@ class Controller:
             return
 
         # setup arguments
+        args = [filePath]
+
         fromInput = self.view.optionsDialogUI.FromLineEdit.text()
         offset = datetime.datetime.strptime(fromInput, '%H:%M:%S').second
+        args.extend(('-o', offset.__str__()))
 
         toInput = self.view.optionsDialogUI.ToLineEdit.text()
         to = datetime.datetime.strptime(toInput, '%H:%M:%S').second
         duration = to - offset
+        args.extend(('-d', duration.__str__()))
+
+        energyTypeInput = self.view.optionsDialogUI.noiseTypeComboBox.currentIndex()
+        energyType = EnergyThresholdOption(energyTypeInput)
+        args.extend(('-e', energyType.__str__()))
+
+        energyValue = self.view.optionsDialogUI.noiseValueLineEdit.text()
+        if energyValue.__len__():
+            args.extend(('-sv', energyValue.__str__()))
 
         from src.main import ROOT_DIRECTORY
-        self.workerProcess.start("python3", [ROOT_DIRECTORY.__str__() + "/src/Model/worker.py", filePath, '-o', offset.__str__(), '-d', duration.__str__()])
+        self.workerProcess.start("python3", [ROOT_DIRECTORY.__str__() + "/src/Model/worker.py", *args])
 
         self.view.openDialog(self.view.DialogType.PROCESSING)
 
@@ -262,3 +290,5 @@ class Controller:
         self.view.optionsDialogUI.fileLineEdit.clear()
         self.view.optionsDialogUI.FromLineEdit.setText('00:00:00')
         self.view.optionsDialogUI.ToLineEdit.setText('00:00:00')
+        self.view.optionsDialogUI.noiseTypeComboBox.setCurrentIndex(0)
+        self.view.optionsDialogUI.noiseValueLineEdit.clear()

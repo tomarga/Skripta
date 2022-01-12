@@ -9,9 +9,9 @@ class EnergyThresholdOption(Enum):
     and then dynamically adjust it, or deal with it dynamically without the start value.
     """
 
-    FIXED = 1
-    MIXED = 2
-    DYNAMIC = 3
+    DYNAMIC = 0
+    MIXED = 1
+    FIXED = 2
 
     def __str__(self):
         """

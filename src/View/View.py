@@ -2,6 +2,7 @@ from pathlib import Path
 
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import QObject
+from PyQt6.QtGui import QIntValidator
 from PyQt6.QtWidgets import QFileDialog
 
 from src.View.Validators.DurationValidator import DurationValidator
@@ -114,7 +115,7 @@ class View(QObject):
 
     def setOptionsDialogValidators(self):
         """
-        Sets file input and duration input validators.
+        Sets validators for inputs on options' dialog.
         :return: Tuple containing both validator instances
         """
 
@@ -129,6 +130,10 @@ class View(QObject):
         # set duration 'to' validator
         toInputValidator = DurationValidator(self.optionsDialog)
         self.optionsDialogUI.ToLineEdit.setValidator(toInputValidator)
+
+        # set noise value validator
+        noiseValidator = QIntValidator(0, 4000, self.optionsDialog)
+        self.optionsDialogUI.noiseValueLineEdit.setValidator(noiseValidator)
 
     def getDialog(self, type: DialogType):
         """

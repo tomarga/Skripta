@@ -105,8 +105,6 @@ class Recognizer:
         try:
             with audioFile as source:
                 self.calibrateThreshold(recognizer, source)
-                # print(recognizer.energy_threshold)
-                # print(recognizer.dynamic_energy_threshold)
 
                 audio = recognizer.record(source, self.basicOptions.duration, self.basicOptions.offset)
 

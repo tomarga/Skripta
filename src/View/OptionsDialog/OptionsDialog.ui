@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
-    <height>650</height>
+    <width>497</width>
+    <height>519</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,6 +24,9 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>20</number>
+   </property>
+   <property name="topMargin">
+    <number>10</number>
    </property>
    <item>
     <layout class="QHBoxLayout" name="fileHLayout">
@@ -76,9 +79,18 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="timeHLayout" stretch="1,0,0,1,1">
+    <layout class="QHBoxLayout" name="timeHLayout" stretch="2,2,1,2,2">
+     <property name="spacing">
+      <number>3</number>
+     </property>
      <item>
       <widget class="QLabel" name="FromLabel">
+       <property name="minimumSize">
+        <size>
+         <width>125</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#ffffff;&quot;&gt;Vremenski interval:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
@@ -175,6 +187,129 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="noiseHLayout" stretch="1,2,1,2">
+     <property name="spacing">
+      <number>19</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="noiseTypeLabel">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vrijednosti više od praga se smatraju govorom, a niže tišinom.&lt;/p&gt;&lt;p&gt;Prag se može odrediti dinamički, s ili bez početne vrijednosti, ili postaviti na fiksnu vrijednost.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#ffffff;&quot;&gt;Prag pozadinske buke:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="noiseTypeComboBox">
+       <item>
+        <property name="text">
+         <string extracomment="komentar">Dinamički</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Hibridni</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Fiksni</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="noiseValueLabel">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vrijednosti više od praga se smatraju govorom, a niže tišinom.&lt;/p&gt;&lt;p&gt;Prag se može odrediti dinamički, s ili bez početne vrijednosti, ili postaviti na fiksnu vrijednost.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Vrijednost: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="noiseValueLineEdit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="placeholderText">
+        <string>0-4000</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,2,1,2">
+     <item>
+      <widget class="QLabel" name="apiLabel">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Svaki poslužitelj podržava neke od niže navedenih opcija.&lt;/p&gt;&lt;p&gt;Sphinx API radi offline.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#ffffff;&quot;&gt;Poslužitelj: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="apiComboBox">
+       <item>
+        <property name="text">
+         <string>Google (dev)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Google Cloud</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>PocketSphinx</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Houndify</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="languageLabel">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Svaki poslužitelj podržava neke od niže navedenih opcija.&lt;/p&gt;&lt;p&gt;Sphinx API radi offline.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#ffffff;&quot;&gt;Jezik:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="languageComboBox">
+       <item>
+        <property name="text">
+         <string>en-US</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -196,7 +331,7 @@
       <number>0</number>
      </property>
      <item>
-      <spacer name="horizontalSpacer">
+      <spacer name="horizontalSpacer_3">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
