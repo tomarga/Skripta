@@ -4,14 +4,17 @@ from PyQt6 import QtWidgets
 from PyQt6.QtCore import QObject
 from PyQt6.QtWidgets import QFileDialog
 
+from src.View.Validators.DurationValidator import DurationValidator
+from src.View.Validators.FileInputValidator import FileInputValidator
 from src.View.MenuWidget.MenuWidget import Ui_MenuWidget
 from src.View.ErrorDialog.ErrorDialog import Ui_ErrorDialog
+from src.View.OptionsDialog.OptionsDialog import Ui_OptionsDialog
 from src.View.SuccessDialog.SuccessDialog import Ui_SuccessDialog
 from src.View.ProcessingDialog.ProcessingDialog import Ui_ProcessingDialog
 
 from enum import Enum
 
-from src.Model.FileTypeUtil import FileTypeUtil
+from src.Model.Utils.FileTypeUtil import FileTypeUtil
 from src.View.MainWindow import MainWindow
 
 
@@ -33,6 +36,8 @@ class View(QObject):
         FILE_SAVE = 7
         TIMED_OUT = 8
         UNAUTHORISED = 9
+        FILE_NOT_FOUND = 10
+        LOAD_OPTIONS = 11
 
         def getErrorMessage(self):
             """
@@ -64,12 +69,18 @@ class View(QObject):
                        "Greška pri obradi zahtjeva: neodobren pristup." \
                        "</p></body></html>"
 
+            if self == self.FILE_NOT_FOUND:
+                return "<html><head/><body><p align=\"center\" style=\"margin-right:30px;\">" \
+                       "Greška pri obradi datoteke: nepostojeća datoteka." \
+                       "</p></body></html>"
+
         def isErrorDialog(self):
             """
             :return: True for error dialog types, False otherwise.
             """
 
-            return self in [self.FAILED_REQUEST, self.DAMAGED_FILE, self.INVALID_FORMAT, self.TIMED_OUT, self.UNAUTHORISED]
+            return self in [self.FAILED_REQUEST, self.DAMAGED_FILE, self.INVALID_FORMAT
+                , self.TIMED_OUT, self.UNAUTHORISED, self.FILE_NOT_FOUND]
 
     def __init__(self):
         """
@@ -96,7 +107,63 @@ class View(QObject):
 
         self.selectFileDialog = self.initSelectFileDialog()
         self.saveFileDialog = self.initSaveFileDialog()
-        
+
+        self.optionsDialog = QtWidgets.QDialog(self.mainWindow)
+        self.optionsDialogUI = self.initOptionsDialog()
+        self.setOptionsDialogValidators()
+
+    def setOptionsDialogValidators(self):
+        """
+        Sets file input and duration input validators.
+        :return: Tuple containing both validator instances
+        """
+
+        # set file input validator
+        fileInputValidator = FileInputValidator(self.optionsDialog)
+        self.optionsDialogUI.fileLineEdit.setValidator(fileInputValidator)
+
+        # set duration 'from' validator
+        fromInputValidator = DurationValidator(self.optionsDialog)
+        self.optionsDialogUI.FromLineEdit.setValidator(fromInputValidator)
+
+        # set duration 'to' validator
+        toInputValidator = DurationValidator(self.optionsDialog)
+        self.optionsDialogUI.ToLineEdit.setValidator(toInputValidator)
+
+    def getDialog(self, type: DialogType):
+        """
+        :param type: Dialog type
+        :return: Corresponding QDialog instance
+        """
+
+        if type.isErrorDialog():
+            return self.errorDialog
+
+        if type == self.DialogType.SUCCESS:
+            return self.successDialog
+
+        if type == self.DialogType.PROCESSING:
+            return self.processingDialog
+
+        if type == self.DialogType.FILE_OPEN:
+            return self.selectFileDialog
+
+        if type == self.DialogType.FILE_SAVE:
+            return self.saveFileDialog
+
+        if type == self.DialogType.LOAD_OPTIONS:
+            return self.optionsDialog
+
+    def initOptionsDialog(self):
+        """
+        Setups transcription from file options dialog's UI.
+        :return: New OptionsDialogUI instance.
+        """
+
+        optionsDialogUI = Ui_OptionsDialog()
+        optionsDialogUI.setupUi(self.optionsDialog)
+        return optionsDialogUI
+
     def initSelectFileDialog(self):
         """
         Setups select file dialog options.
@@ -177,19 +244,8 @@ class View(QObject):
 
         if type.isErrorDialog():
             self.errorDialogUI.setText(type.getErrorMessage())
-            self.errorDialog.open()
 
-        if type == self.DialogType.SUCCESS:
-            self.successDialog.open()
-
-        if type == self.DialogType.PROCESSING:
-            self.processingDialog.open()
-
-        if type == self.DialogType.FILE_OPEN:
-            self.selectFileDialog.open()
-
-        if type == self.DialogType.FILE_SAVE:
-            self.saveFileDialog.open()
+        self.getDialog(type).open()
 
     def closeDialog(self, type: DialogType):
         """
@@ -198,20 +254,7 @@ class View(QObject):
         :return:
         """
 
-        if type.isErrorDialog():
-            self.errorDialog.close()
-
-        if type == self.DialogType.SUCCESS:
-            self.successDialog.close()
-
-        if type == self.DialogType.PROCESSING:
-            self.processingDialog.close()
-            
-        if type == self.DialogType.FILE_OPEN:
-            self.selectFileDialog.close()
-
-        if type == self.DialogType.FILE_SAVE:
-            self.saveFileDialog.close()
+        self.getDialog(type).close()
 
     def closeAllDialogs(self):
         """
