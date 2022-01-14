@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'ui/MainWindow.ui'
+# Form implementation generated from reading ui file 'src/MenuWidget/MenuWidget.ui'
 #
 # Created by: PyQt6 UI code generator 6.1.0
 #
@@ -9,21 +9,21 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWidget(object):
-    def setupUi(self, MainWidget):
-        MainWidget.setObjectName("MainWidget")
-        MainWidget.resize(800, 800)
-        MainWidget.setMaximumSize(QtCore.QSize(800, 800))
-        MainWidget.setStatusTip("")
-        MainWidget.setWhatsThis("")
-        MainWidget.setAccessibleName("")
-        MainWidget.setAccessibleDescription("")
-        MainWidget.setAutoFillBackground(False)
-        MainWidget.setStyleSheet("QWidget #MainWidget {\n"
+class Ui_MenuWidget(object):
+    def setupUi(self, MenuWidget):
+        MenuWidget.setObjectName("MenuWidget")
+        MenuWidget.resize(800, 800)
+        MenuWidget.setMaximumSize(QtCore.QSize(800, 800))
+        MenuWidget.setStatusTip("")
+        MenuWidget.setWhatsThis("")
+        MenuWidget.setAccessibleName("")
+        MenuWidget.setAccessibleDescription("")
+        MenuWidget.setAutoFillBackground(False)
+        MenuWidget.setStyleSheet("QWidget #MenuWidget {\n"
 "    background-image: url(\"images:main-window.png\");\n"
 "    background-attachment:  fixed;\n"
 "}")
-        self.RecordButton = QtWidgets.QPushButton(MainWidget)
+        self.RecordButton = QtWidgets.QPushButton(MenuWidget)
         self.RecordButton.setGeometry(QtCore.QRect(200, 120, 183, 183))
         self.RecordButton.setStyleSheet("QPushButton#RecordButton{\n"
 "    border-radius: 91px;\n"
@@ -41,12 +41,12 @@ class Ui_MainWidget(object):
 "")
         self.RecordButton.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("ui/../resources/icons/mic.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap("../resources/icons/mic.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.RecordButton.setIcon(icon)
         self.RecordButton.setIconSize(QtCore.QSize(140, 140))
         self.RecordButton.setCheckable(True)
         self.RecordButton.setObjectName("RecordButton")
-        self.LoadButton = QtWidgets.QPushButton(MainWidget)
+        self.LoadButton = QtWidgets.QPushButton(MenuWidget)
         self.LoadButton.setGeometry(QtCore.QRect(417, 481, 183, 183))
         self.LoadButton.setStyleSheet("QPushButton#LoadButton {\n"
 "    border-radius: 91px;\n"
@@ -64,7 +64,7 @@ class Ui_MainWidget(object):
 "")
         self.LoadButton.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("ui/../resources/icons/audio.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon1.addPixmap(QtGui.QPixmap("../resources/icons/audio.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.LoadButton.setIcon(icon1)
         self.LoadButton.setIconSize(QtCore.QSize(150, 150))
         self.LoadButton.setCheckable(True)
@@ -72,9 +72,19 @@ class Ui_MainWidget(object):
         self.LoadButton.raise_()
         self.RecordButton.raise_()
 
-        self.retranslateUi(MainWidget)
-        QtCore.QMetaObject.connectSlotsByName(MainWidget)
+        self.retranslateUi(MenuWidget)
+        QtCore.QMetaObject.connectSlotsByName(MenuWidget)
 
-    def retranslateUi(self, MainWidget):
+    def retranslateUi(self, MenuWidget):
         _translate = QtCore.QCoreApplication.translate
-        MainWidget.setWindowTitle(_translate("MainWidget", "Skripta"))
+        MenuWidget.setWindowTitle(_translate("MenuWidget", "Skripta"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MenuWidget = QtWidgets.QWidget()
+    ui = Ui_MenuWidget()
+    ui.setupUi(MenuWidget)
+    MenuWidget.show()
+    sys.exit(app.exec())
