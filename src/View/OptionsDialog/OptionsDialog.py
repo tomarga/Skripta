@@ -12,27 +12,64 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_OptionsDialog(object):
     def setupUi(self, OptionsDialog):
         OptionsDialog.setObjectName("OptionsDialog")
-        OptionsDialog.resize(497, 519)
+        OptionsDialog.resize(620, 735)
         OptionsDialog.setStyleSheet("QDialog#OptionsDialog {\n"
 "    background-color: rgb(84, 84, 84);\n"
 "}")
         OptionsDialog.setModal(False)
-        self.verticalLayout = QtWidgets.QVBoxLayout(OptionsDialog)
-        self.verticalLayout.setContentsMargins(-1, 10, -1, -1)
-        self.verticalLayout.setSpacing(20)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(OptionsDialog)
+        self.verticalLayout_4.setContentsMargins(-1, 25, -1, -1)
+        self.verticalLayout_4.setSpacing(25)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.label = QtWidgets.QLabel(OptionsDialog)
+        self.label.setObjectName("label")
+        self.horizontalLayout_7.addWidget(self.label)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_7)
+        self.frame = QtWidgets.QFrame(OptionsDialog)
+        self.frame.setStyleSheet("QFrame {\n"
+"padding-right: 5px;\n"
+"padding-top: 5px;\n"
+"padding-bottom: 5px;\n"
+"}")
+        self.frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.frame.setObjectName("frame")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.frame)
         self.verticalLayout.setObjectName("verticalLayout")
         self.fileHLayout = QtWidgets.QHBoxLayout()
         self.fileHLayout.setObjectName("fileHLayout")
-        self.FileLabel = QtWidgets.QLabel(OptionsDialog)
+        self.FileLabel = QtWidgets.QLabel(self.frame)
         self.FileLabel.setObjectName("FileLabel")
         self.fileHLayout.addWidget(self.FileLabel)
-        self.fileLineEdit = QtWidgets.QLineEdit(OptionsDialog)
+        self.fileLineEdit = QtWidgets.QLineEdit(self.frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fileLineEdit.sizePolicy().hasHeightForWidth())
+        self.fileLineEdit.setSizePolicy(sizePolicy)
+        self.fileLineEdit.setMaximumSize(QtCore.QSize(400, 16777215))
+        self.fileLineEdit.setStyleSheet("QLineEdit {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border-bottom: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QLineEdit::hover {\n"
+"    border-color: #63C2C4;\n"
+"}")
         self.fileLineEdit.setText("")
+        self.fileLineEdit.setFrame(True)
         self.fileLineEdit.setReadOnly(False)
         self.fileLineEdit.setClearButtonEnabled(True)
         self.fileLineEdit.setObjectName("fileLineEdit")
         self.fileHLayout.addWidget(self.fileLineEdit)
-        self.browseFileButton = QtWidgets.QPushButton(OptionsDialog)
+        self.browseFileButton = QtWidgets.QPushButton(self.frame)
+        self.browseFileButton.setMaximumSize(QtCore.QSize(30, 16777215))
         self.browseFileButton.setAutoFillBackground(False)
         self.browseFileButton.setStyleSheet("QPushButton {\n"
 "    background-color: rgb(84, 84, 84);\n"
@@ -40,28 +77,82 @@ class Ui_OptionsDialog(object):
 "}")
         self.browseFileButton.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("src/View/OptionsDialog/../../../resources/icons/browse.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap("../resources/icons/browse.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.browseFileButton.setIcon(icon)
         self.browseFileButton.setAutoDefault(False)
         self.browseFileButton.setFlat(False)
         self.browseFileButton.setObjectName("browseFileButton")
         self.fileHLayout.addWidget(self.browseFileButton)
         self.verticalLayout.addLayout(self.fileHLayout)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.apiLabel = QtWidgets.QLabel(self.frame)
+        self.apiLabel.setObjectName("apiLabel")
+        self.horizontalLayout.addWidget(self.apiLabel)
+        self.apiComboBox = QtWidgets.QComboBox(self.frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.apiComboBox.sizePolicy().hasHeightForWidth())
+        self.apiComboBox.setSizePolicy(sizePolicy)
+        self.apiComboBox.setStyleSheet("QComboBox {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border-bottom: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QComboBox::hover {\n"
+"    border-color: #63C2C4;\n"
+"}\n"
+"\n"
+"/*  After dropping, the entire drop-down form style */\n"
+"QComboBox QAbstractItemView {\n"
+"    border: 1px solid white;   /*  Border of the entire drop-down form */\n"
+"    background-color: rgb(84, 84, 84);;   /*  Whole drop-down form background color */\n"
+"    selection-background-color: lightgreen;   /*  The whole drop-down window is selected from the background color of the item */\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item {\n"
+"    height: 70px; \n"
+"}")
+        self.apiComboBox.setObjectName("apiComboBox")
+        self.apiComboBox.addItem("")
+        self.apiComboBox.addItem("")
+        self.apiComboBox.addItem("")
+        self.apiComboBox.addItem("")
+        self.horizontalLayout.addWidget(self.apiComboBox)
+        self.verticalLayout.addLayout(self.horizontalLayout)
         self.timeHLayout = QtWidgets.QHBoxLayout()
-        self.timeHLayout.setSpacing(3)
+        self.timeHLayout.setSpacing(6)
         self.timeHLayout.setObjectName("timeHLayout")
-        self.FromLabel = QtWidgets.QLabel(OptionsDialog)
+        self.FromLabel = QtWidgets.QLabel(self.frame)
         self.FromLabel.setMinimumSize(QtCore.QSize(125, 0))
         self.FromLabel.setObjectName("FromLabel")
         self.timeHLayout.addWidget(self.FromLabel)
-        self.FromLineEdit = QtWidgets.QLineEdit(OptionsDialog)
+        self.FromLineEdit = QtWidgets.QLineEdit(self.frame)
         self.FromLineEdit.setEnabled(True)
         self.FromLineEdit.setMaximumSize(QtCore.QSize(61, 16777215))
+        self.FromLineEdit.setStyleSheet("QLineEdit {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border-bottom: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QLineEdit::hover {\n"
+"    border-color: #63C2C4;\n"
+"}")
         self.FromLineEdit.setInputMethodHints(QtCore.Qt.InputMethodHint.ImhTime)
+        self.FromLineEdit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.FromLineEdit.setDragEnabled(False)
         self.FromLineEdit.setObjectName("FromLineEdit")
         self.timeHLayout.addWidget(self.FromLineEdit)
-        self.DashLabel = QtWidgets.QLabel(OptionsDialog)
+        self.DashLabel = QtWidgets.QLabel(self.frame)
         self.DashLabel.setMaximumSize(QtCore.QSize(20, 16777215))
         self.DashLabel.setStyleSheet("QLabel#DashLabel {\n"
 "    padding-left: 5px;\n"
@@ -69,83 +160,327 @@ class Ui_OptionsDialog(object):
 "    ")
         self.DashLabel.setObjectName("DashLabel")
         self.timeHLayout.addWidget(self.DashLabel)
-        self.ToLineEdit = QtWidgets.QLineEdit(OptionsDialog)
+        self.ToLineEdit = QtWidgets.QLineEdit(self.frame)
         self.ToLineEdit.setEnabled(True)
         self.ToLineEdit.setMaximumSize(QtCore.QSize(61, 16777215))
+        self.ToLineEdit.setStyleSheet("QLineEdit {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border-bottom: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QLineEdit::hover {\n"
+"    border-color: #63C2C4;\n"
+"}")
         self.ToLineEdit.setInputMethodHints(QtCore.Qt.InputMethodHint.ImhTime)
+        self.ToLineEdit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ToLineEdit.setDragEnabled(False)
         self.ToLineEdit.setObjectName("ToLineEdit")
         self.timeHLayout.addWidget(self.ToLineEdit)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
-        self.timeHLayout.addItem(spacerItem)
-        self.timeHLayout.setStretch(0, 2)
-        self.timeHLayout.setStretch(1, 2)
-        self.timeHLayout.setStretch(2, 1)
-        self.timeHLayout.setStretch(3, 2)
-        self.timeHLayout.setStretch(4, 2)
         self.verticalLayout.addLayout(self.timeHLayout)
+        self.verticalLayout_4.addWidget(self.frame)
+        self.label_3 = QtWidgets.QLabel(OptionsDialog)
+        self.label_3.setObjectName("label_3")
+        self.verticalLayout_4.addWidget(self.label_3)
+        self.frame_3 = QtWidgets.QFrame(OptionsDialog)
+        self.frame_3.setStyleSheet("QFrame {\n"
+"\n"
+"padding-right: 5px;\n"
+"padding-top: 5px;\n"
+"padding-bottom: 5px;\n"
+"}")
+        self.frame_3.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.frame_3.setObjectName("frame_3")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_3)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.noiseHLayout = QtWidgets.QHBoxLayout()
-        self.noiseHLayout.setSpacing(19)
+        self.noiseHLayout.setSpacing(6)
         self.noiseHLayout.setObjectName("noiseHLayout")
-        self.noiseTypeLabel = QtWidgets.QLabel(OptionsDialog)
+        self.noiseTypeLabel = QtWidgets.QLabel(self.frame_3)
         self.noiseTypeLabel.setObjectName("noiseTypeLabel")
         self.noiseHLayout.addWidget(self.noiseTypeLabel)
-        self.noiseTypeComboBox = QtWidgets.QComboBox(OptionsDialog)
+        self.noiseTypeComboBox = QtWidgets.QComboBox(self.frame_3)
+        self.noiseTypeComboBox.setStyleSheet("QComboBox {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border-bottom: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QComboBox::hover {\n"
+"    border-color: #63C2C4;\n"
+"}\n"
+"\n"
+"/*  After dropping, the entire drop-down form style */\n"
+"QComboBox QAbstractItemView {\n"
+"    border: 1px solid white;   /*  Border of the entire drop-down form */\n"
+"    background-color: rgb(84, 84, 84);;   /*  Whole drop-down form background color */\n"
+"    selection-background-color: lightgreen;   /*  The whole drop-down window is selected from the background color of the item */\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item {\n"
+"    height: 70px; \n"
+"}")
+        self.noiseTypeComboBox.setFrame(False)
         self.noiseTypeComboBox.setObjectName("noiseTypeComboBox")
         self.noiseTypeComboBox.addItem("")
         self.noiseTypeComboBox.addItem("")
         self.noiseTypeComboBox.addItem("")
         self.noiseHLayout.addWidget(self.noiseTypeComboBox)
-        self.noiseValueLabel = QtWidgets.QLabel(OptionsDialog)
+        self.verticalLayout_3.addLayout(self.noiseHLayout)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.noiseValueLabel = QtWidgets.QLabel(self.frame_3)
         self.noiseValueLabel.setEnabled(True)
         self.noiseValueLabel.setObjectName("noiseValueLabel")
-        self.noiseHLayout.addWidget(self.noiseValueLabel)
-        self.noiseValueLineEdit = QtWidgets.QLineEdit(OptionsDialog)
+        self.horizontalLayout_2.addWidget(self.noiseValueLabel)
+        self.noiseValueLineEdit = QtWidgets.QLineEdit(self.frame_3)
         self.noiseValueLineEdit.setEnabled(False)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.noiseValueLineEdit.sizePolicy().hasHeightForWidth())
+        self.noiseValueLineEdit.setSizePolicy(sizePolicy)
+        self.noiseValueLineEdit.setStyleSheet("QLineEdit {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border-bottom: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QLineEdit::hover {\n"
+"    border-color: #63C2C4;\n"
+"}\n"
+"\n"
+"QLineEdit::disabled {\n"
+"    color: rgb(153, 153, 153);\n"
+"}\n"
+"")
         self.noiseValueLineEdit.setObjectName("noiseValueLineEdit")
-        self.noiseHLayout.addWidget(self.noiseValueLineEdit)
-        self.noiseHLayout.setStretch(0, 1)
-        self.noiseHLayout.setStretch(1, 2)
-        self.noiseHLayout.setStretch(2, 1)
-        self.noiseHLayout.setStretch(3, 2)
-        self.verticalLayout.addLayout(self.noiseHLayout)
-        self.line = QtWidgets.QFrame(OptionsDialog)
-        self.line.setFrameShape(QtWidgets.QFrame.Shape.HLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
-        self.line.setObjectName("line")
-        self.verticalLayout.addWidget(self.line)
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.apiLabel = QtWidgets.QLabel(OptionsDialog)
-        self.apiLabel.setObjectName("apiLabel")
-        self.horizontalLayout.addWidget(self.apiLabel)
-        self.apiComboBox = QtWidgets.QComboBox(OptionsDialog)
-        self.apiComboBox.setObjectName("apiComboBox")
-        self.apiComboBox.addItem("")
-        self.apiComboBox.addItem("")
-        self.apiComboBox.addItem("")
-        self.apiComboBox.addItem("")
-        self.horizontalLayout.addWidget(self.apiComboBox)
-        self.languageLabel = QtWidgets.QLabel(OptionsDialog)
+        self.horizontalLayout_2.addWidget(self.noiseValueLineEdit)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_2)
+        self.verticalLayout_4.addWidget(self.frame_3)
+        self.label_2 = QtWidgets.QLabel(OptionsDialog)
+        self.label_2.setObjectName("label_2")
+        self.verticalLayout_4.addWidget(self.label_2)
+        self.frame_2 = QtWidgets.QFrame(OptionsDialog)
+        self.frame_2.setStyleSheet("QFrame {\n"
+"padding-right: 5px;\n"
+"padding-top: 5px;\n"
+"padding-bottom: 5px;\n"
+"}")
+        self.frame_2.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.frame_2.setObjectName("frame_2")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_2)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.languageLabel = QtWidgets.QLabel(self.frame_2)
         self.languageLabel.setObjectName("languageLabel")
-        self.horizontalLayout.addWidget(self.languageLabel)
-        self.languageComboBox = QtWidgets.QComboBox(OptionsDialog)
+        self.horizontalLayout_3.addWidget(self.languageLabel)
+        self.languageComboBox = QtWidgets.QComboBox(self.frame_2)
+        self.languageComboBox.setEnabled(True)
+        self.languageComboBox.setStyleSheet("QComboBox {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border-bottom: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QComboBox::hover {\n"
+"    border-color: #63C2C4;\n"
+"}\n"
+"\n"
+"QComboBox::disabled {\n"
+"    color: rgb(153, 153, 153);\n"
+"}\n"
+"\n"
+"\n"
+"/*  After dropping, the entire drop-down form style */\n"
+"QComboBox QAbstractItemView {\n"
+"    border: 1px solid white;   /*  Border of the entire drop-down form */\n"
+"    background-color: rgb(84, 84, 84);;   /*  Whole drop-down form background color */\n"
+"    color: white;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"}\n"
+"\n"
+"/*  Down pull, the entire drop-down window */\n"
+"QComboBox QAbstractItemView::item {\n"
+"    height: 25px;   /*  The height of the item (set pcomboBox-> setView (new qlistview ()); after this item works) */\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    border: none;\n"
+"    border-top: 0.5px solid rgb(81, 81, 81);\n"
+"    border-bottom: 0.5px solid rgb(81, 81, 81);\n"
+"    border-radius: 2px;\n"
+"    background-color: rgb(84, 84, 84);\n"
+"}")
+        self.languageComboBox.setEditable(True)
         self.languageComboBox.setObjectName("languageComboBox")
         self.languageComboBox.addItem("")
-        self.horizontalLayout.addWidget(self.languageComboBox)
-        self.horizontalLayout.setStretch(0, 1)
-        self.horizontalLayout.setStretch(1, 2)
-        self.horizontalLayout.setStretch(2, 1)
-        self.horizontalLayout.setStretch(3, 2)
-        self.verticalLayout.addLayout(self.horizontalLayout)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
-        self.verticalLayout.addItem(spacerItem1)
+        self.languageComboBox.addItem("")
+        self.languageComboBox.addItem("")
+        self.languageComboBox.addItem("")
+        self.languageComboBox.addItem("")
+        self.languageComboBox.addItem("")
+        self.languageComboBox.addItem("")
+        self.languageComboBox.addItem("")
+        self.languageComboBox.addItem("")
+        self.languageComboBox.addItem("")
+        self.languageComboBox.addItem("")
+        self.languageComboBox.addItem("")
+        self.horizontalLayout_3.addWidget(self.languageComboBox)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.phrasesLabel = QtWidgets.QLabel(self.frame_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.phrasesLabel.sizePolicy().hasHeightForWidth())
+        self.phrasesLabel.setSizePolicy(sizePolicy)
+        self.phrasesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignTop)
+        self.phrasesLabel.setObjectName("phrasesLabel")
+        self.horizontalLayout_4.addWidget(self.phrasesLabel)
+        self.phrasesTextEdit = QtWidgets.QPlainTextEdit(self.frame_2)
+        self.phrasesTextEdit.setEnabled(False)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.phrasesTextEdit.sizePolicy().hasHeightForWidth())
+        self.phrasesTextEdit.setSizePolicy(sizePolicy)
+        self.phrasesTextEdit.setStyleSheet("QPlainTextEdit {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QPlainTextEdit::hover {\n"
+"    border-color: #63C2C4;\n"
+"}\n"
+"\n"
+"QPlainTextEdit::disabled {\n"
+"    color: rgb(153, 153, 153);\n"
+"}")
+        self.phrasesTextEdit.setObjectName("phrasesTextEdit")
+        self.horizontalLayout_4.addWidget(self.phrasesTextEdit)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.sensitivityLabel = QtWidgets.QLabel(self.frame_2)
+        self.sensitivityLabel.setEnabled(False)
+        self.sensitivityLabel.setObjectName("sensitivityLabel")
+        self.horizontalLayout_5.addWidget(self.sensitivityLabel)
+        self.sensitivityLineEdit = QtWidgets.QLineEdit(self.frame_2)
+        self.sensitivityLineEdit.setEnabled(False)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.sensitivityLineEdit.sizePolicy().hasHeightForWidth())
+        self.sensitivityLineEdit.setSizePolicy(sizePolicy)
+        self.sensitivityLineEdit.setToolTip("")
+        self.sensitivityLineEdit.setStyleSheet("QLineEdit {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border-bottom: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QLineEdit::hover {\n"
+"    border-color:#63C2C4;\n"
+"}\n"
+"\n"
+"QLineEdit::disabled {\n"
+"    color: rgb(153, 153, 153);\n"
+"}")
+        self.sensitivityLineEdit.setObjectName("sensitivityLineEdit")
+        self.horizontalLayout_5.addWidget(self.sensitivityLineEdit)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.grammarLabel = QtWidgets.QLabel(self.frame_2)
+        self.grammarLabel.setObjectName("grammarLabel")
+        self.horizontalLayout_6.addWidget(self.grammarLabel)
+        self.grammarLineEdit = QtWidgets.QLineEdit(self.frame_2)
+        self.grammarLineEdit.setEnabled(False)
+        self.grammarLineEdit.setMaximumSize(QtCore.QSize(400, 16777215))
+        self.grammarLineEdit.setStyleSheet("QLineEdit {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border-bottom: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QLineEdit::hover {\n"
+"    border-color:#63C2C4;\n"
+"}")
+        self.grammarLineEdit.setText("")
+        self.grammarLineEdit.setObjectName("grammarLineEdit")
+        self.horizontalLayout_6.addWidget(self.grammarLineEdit)
+        self.browseGrammarButton = QtWidgets.QPushButton(self.frame_2)
+        self.browseGrammarButton.setEnabled(False)
+        self.browseGrammarButton.setMaximumSize(QtCore.QSize(30, 16777215))
+        self.browseGrammarButton.setStyleSheet("QPushButton {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-color: white\n"
+"}")
+        self.browseGrammarButton.setText("")
+        self.browseGrammarButton.setIcon(icon)
+        self.browseGrammarButton.setAutoDefault(False)
+        self.browseGrammarButton.setObjectName("browseGrammarButton")
+        self.horizontalLayout_6.addWidget(self.browseGrammarButton)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_6)
+        self.verticalLayout_4.addWidget(self.frame_2)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
+        self.verticalLayout_4.addItem(spacerItem)
         self.buttonBox = QtWidgets.QHBoxLayout()
         self.buttonBox.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetFixedSize)
         self.buttonBox.setContentsMargins(0, -1, -1, -1)
+        self.buttonBox.setSpacing(6)
         self.buttonBox.setObjectName("buttonBox")
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
-        self.buttonBox.addItem(spacerItem2)
+        self.resetButton = QtWidgets.QPushButton(OptionsDialog)
+        self.resetButton.setMinimumSize(QtCore.QSize(135, 30))
+        self.resetButton.setMaximumSize(QtCore.QSize(135, 30))
+        self.resetButton.setStyleSheet("QPushButton {\n"
+"    border-radius: 6px;\n"
+"    border: 3px solid white;\n"
+"\n"
+"    font-weight: 600;\n"
+"    font-size: 14px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(208, 208, 208); \n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(70, 70, 70);\n"
+"}")
+        self.resetButton.setAutoDefault(False)
+        self.resetButton.setObjectName("resetButton")
+        self.buttonBox.addWidget(self.resetButton)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.buttonBox.addItem(spacerItem1)
         self.CancelButton = QtWidgets.QPushButton(OptionsDialog)
         self.CancelButton.setMinimumSize(QtCore.QSize(135, 30))
         self.CancelButton.setStyleSheet("QPushButton#CancelButton {\n"
@@ -196,7 +531,7 @@ class Ui_OptionsDialog(object):
         self.OKButton.setDefault(False)
         self.OKButton.setObjectName("OKButton")
         self.buttonBox.addWidget(self.OKButton)
-        self.verticalLayout.addLayout(self.buttonBox)
+        self.verticalLayout_4.addLayout(self.buttonBox)
 
         self.retranslateUi(OptionsDialog)
         self.OKButton.clicked.connect(OptionsDialog.accept)
@@ -206,7 +541,14 @@ class Ui_OptionsDialog(object):
     def retranslateUi(self, OptionsDialog):
         _translate = QtCore.QCoreApplication.translate
         OptionsDialog.setWindowTitle(_translate("OptionsDialog", "Opcije"))
+        self.label.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:700; color:#ffffff;\">Osnovne postavke</span></p></body></html>"))
         self.FileLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Datoteka: </span></p></body></html>"))
+        self.apiLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Svaki poslužitelj podržava neke od niže navedenih opcija.</p><p>Sphinx API radi offline.</p></body></html>"))
+        self.apiLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Poslužitelj: </span></p></body></html>"))
+        self.apiComboBox.setItemText(0, _translate("OptionsDialog", "Google (dev)"))
+        self.apiComboBox.setItemText(1, _translate("OptionsDialog", "Google Cloud"))
+        self.apiComboBox.setItemText(2, _translate("OptionsDialog", "PocketSphinx"))
+        self.apiComboBox.setItemText(3, _translate("OptionsDialog", "Houndify"))
         self.FromLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Vremenski interval:</span></p></body></html>"))
         self.FromLineEdit.setInputMask(_translate("OptionsDialog", "99:99:99"))
         self.FromLineEdit.setText(_translate("OptionsDialog", "00:00:00"))
@@ -215,23 +557,38 @@ class Ui_OptionsDialog(object):
         self.ToLineEdit.setInputMask(_translate("OptionsDialog", "99:99:99"))
         self.ToLineEdit.setText(_translate("OptionsDialog", "00:00:00"))
         self.ToLineEdit.setPlaceholderText(_translate("OptionsDialog", "00:00"))
+        self.label_3.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:700; color:#ffffff;\">Postavke zvuka</span></p></body></html>"))
         self.noiseTypeLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Vrijednosti više od praga se smatraju govorom, a niže tišinom.</p><p>Prag se može odrediti dinamički, s ili bez početne vrijednosti, ili postaviti na fiksnu vrijednost.</p></body></html>"))
         self.noiseTypeLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Prag pozadinske buke:</span></p></body></html>"))
         self.noiseTypeComboBox.setItemText(0, _translate("OptionsDialog", "Dinamički"))
         self.noiseTypeComboBox.setItemText(1, _translate("OptionsDialog", "Hibridni"))
         self.noiseTypeComboBox.setItemText(2, _translate("OptionsDialog", "Fiksni"))
-        self.noiseValueLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Vrijednosti više od praga se smatraju govorom, a niže tišinom.</p><p>Prag se može odrediti dinamički, s ili bez početne vrijednosti, ili postaviti na fiksnu vrijednost.</p></body></html>"))
+        self.noiseValueLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Ovisno o odabiru načina određivanja praga pozadinske buke ova vrijednost označava početnu(\'Hibridni\') ili stalnu(\'Fiksni\') vrijednost praga.</p></body></html>"))
         self.noiseValueLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" color:#ffffff;\">Vrijednost: </span></p></body></html>"))
         self.noiseValueLineEdit.setPlaceholderText(_translate("OptionsDialog", "0-4000"))
-        self.apiLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Svaki poslužitelj podržava neke od niže navedenih opcija.</p><p>Sphinx API radi offline.</p></body></html>"))
-        self.apiLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Poslužitelj: </span></p></body></html>"))
-        self.apiComboBox.setItemText(0, _translate("OptionsDialog", "Google (dev)"))
-        self.apiComboBox.setItemText(1, _translate("OptionsDialog", "Google Cloud"))
-        self.apiComboBox.setItemText(2, _translate("OptionsDialog", "PocketSphinx"))
-        self.apiComboBox.setItemText(3, _translate("OptionsDialog", "Houndify"))
-        self.languageLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Svaki poslužitelj podržava neke od niže navedenih opcija.</p><p>Sphinx API radi offline.</p></body></html>"))
+        self.label_2.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:700; color:#ffffff;\">Jezične postavke</span></p></body></html>"))
         self.languageLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Jezik:</span></p></body></html>"))
         self.languageComboBox.setItemText(0, _translate("OptionsDialog", "en-US"))
+        self.languageComboBox.setItemText(1, _translate("OptionsDialog", "1"))
+        self.languageComboBox.setItemText(2, _translate("OptionsDialog", "2"))
+        self.languageComboBox.setItemText(3, _translate("OptionsDialog", "3"))
+        self.languageComboBox.setItemText(4, _translate("OptionsDialog", "4"))
+        self.languageComboBox.setItemText(5, _translate("OptionsDialog", "5"))
+        self.languageComboBox.setItemText(6, _translate("OptionsDialog", "6"))
+        self.languageComboBox.setItemText(7, _translate("OptionsDialog", "7"))
+        self.languageComboBox.setItemText(8, _translate("OptionsDialog", "8"))
+        self.languageComboBox.setItemText(9, _translate("OptionsDialog", "9"))
+        self.languageComboBox.setItemText(10, _translate("OptionsDialog", "10"))
+        self.languageComboBox.setItemText(11, _translate("OptionsDialog", "11"))
+        self.phrasesLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Navedene riječi ili fraze će imati prednost prepoznavanja nad riječima koje slično zvuče. </p><p>Svaku frazu je potrebno navesti u posebnom retku.</p><p>U slučaju Sphinx poslužitelja, moguće je specificirati razinu osjetljivosti za svaku frazu, tako da se na kraju retka navede broj od 0 do 1.</p></body></html>"))
+        self.phrasesLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Ključne riječi: </span></p></body></html>"))
+        self.phrasesTextEdit.setPlaceholderText(_translate("OptionsDialog", "riječ/fraza osjetljivost"))
+        self.sensitivityLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Razina osjetljivosti za sve ključne riječi kojima osjetljivost nije ranije(gore) specificirana.</p><p>Veća osjetljivosti vodi ka \'češćem\' prepoznavanju i obrnuto.</p></body></html>"))
+        self.sensitivityLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Razina osjetljivosti: </span></p></body></html>"))
+        self.sensitivityLineEdit.setPlaceholderText(_translate("OptionsDialog", "0-1"))
+        self.grammarLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Datoteka u kojoj je definirana FSG ili JSGF gramatika.</p><p>Unos gramatike će se ignorirati ako su definirane ključne riječi.</p></body></html>"))
+        self.grammarLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Gramatika:</span></p></body></html>"))
+        self.resetButton.setText(_translate("OptionsDialog", "Reset"))
         self.CancelButton.setText(_translate("OptionsDialog", "Odustani"))
         self.OKButton.setText(_translate("OptionsDialog", "OK"))
 

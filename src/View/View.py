@@ -2,7 +2,7 @@ from pathlib import Path
 
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import QObject
-from PyQt6.QtGui import QIntValidator
+from PyQt6.QtGui import QIntValidator, QDoubleValidator
 from PyQt6.QtWidgets import QFileDialog
 
 from src.View.Validators.DurationValidator import DurationValidator
@@ -35,10 +35,11 @@ class View(QObject):
         DAMAGED_FILE = 5
         FILE_OPEN = 6
         FILE_SAVE = 7
-        TIMED_OUT = 8
-        UNAUTHORISED = 9
-        FILE_NOT_FOUND = 10
-        LOAD_OPTIONS = 11
+        GRAMMAR_OPEN = 8
+        TIMED_OUT = 9
+        UNAUTHORISED = 10
+        FILE_NOT_FOUND = 11
+        LOAD_OPTIONS = 12
 
         def getErrorMessage(self):
             """
@@ -107,6 +108,7 @@ class View(QObject):
         self.errorDialogUI = self.initErrorDialogUI()
 
         self.selectFileDialog = self.initSelectFileDialog()
+        self.selectGrammarDialog = self.initSelectGrammarDialog()
         self.saveFileDialog = self.initSaveFileDialog()
 
         self.optionsDialog = QtWidgets.QDialog(self.mainWindow)
@@ -135,6 +137,11 @@ class View(QObject):
         noiseValidator = QIntValidator(0, 4000, self.optionsDialog)
         self.optionsDialogUI.noiseValueLineEdit.setValidator(noiseValidator)
 
+        # set keywords sensibility validator
+        sensibilityValidator = QDoubleValidator(0.0, 1.0, 2, self.optionsDialog)
+        sensibilityValidator.setNotation(QDoubleValidator.Notation.StandardNotation)
+        self.optionsDialogUI.sensitivityLineEdit.setValidator(sensibilityValidator)
+
     def getDialog(self, type: DialogType):
         """
         :param type: Dialog type
@@ -159,6 +166,9 @@ class View(QObject):
         if type == self.DialogType.LOAD_OPTIONS:
             return self.optionsDialog
 
+        if type == self.DialogType.GRAMMAR_OPEN:
+            return self.selectGrammarDialog
+
     def initOptionsDialog(self):
         """
         Setups transcription from file options dialog's UI.
@@ -167,6 +177,8 @@ class View(QObject):
 
         optionsDialogUI = Ui_OptionsDialog()
         optionsDialogUI.setupUi(self.optionsDialog)
+        optionsDialogUI.languageComboBox.setMaxVisibleItems(10)
+
         return optionsDialogUI
 
     def initSelectFileDialog(self):
@@ -183,11 +195,28 @@ class View(QObject):
         fileDialog.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
         fileDialog.setWindowTitle('Izaberi audio datoteku')
         fileDialog.setFileMode(QFileDialog.FileMode.ExistingFile)
-        fileDialog.setNameFilters(["Audio files {}".format(FileTypeUtil.listExtensionsAsString(audioExtensions))])
+        fileDialog.setNameFilters(["Audio datoteke {}".format(FileTypeUtil.listExtensionsAsString(audioExtensions))])
         fileDialog.setDirectory(str(Path.home()))
 
         return fileDialog
+    
+    def initSelectGrammarDialog(self):
+        """
+        Setups select file dialog options for the grammar file selection.
+        The dialog is set to open the home directory, and show only .gram, .fsg and .jsfg files.
+        :return: New QFileDialog instance.
+        """
 
+        fileDialog = QFileDialog(self.mainWindow)
+
+        fileDialog.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
+        fileDialog.setWindowTitle('Izaberi gramatiku')
+        fileDialog.setFileMode(QFileDialog.FileMode.ExistingFile)
+        fileDialog.setNameFilters(["Gramatike (*.gram *.fsg *.jsfg)"])
+        fileDialog.setDirectory(str(Path.home()))
+
+        return fileDialog
+    
     def initSaveFileDialog(self):
         """
         Setups save file dialog options.

@@ -2,7 +2,7 @@ import argparse
 
 from src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
 from src.Model.Enums.API import API
-from Recognizer import Recognizer
+from src.Model.Workers.Recognizer import Recognizer
 
 
 def setupParser():
@@ -49,7 +49,9 @@ if __name__ == '__main__':
     phrases = args.phrases
     if args.phrases_values:
         for index, phrase in enumerate(args.phrases):
-            phrases[index] = (phrase, args.phrases_values[index])
+
+            # values are 'inverted' because of the sphinx package implementation
+            phrases[index] = (phrase, 1 - args.phrases_values[index])
 
     file = args.file
     basicOptions = Recognizer.BasicOptions(args.energy, args.start_value, args.offset, args.duration)

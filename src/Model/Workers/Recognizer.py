@@ -3,6 +3,7 @@ import socket
 import sys
 
 import speech_recognition as sr
+
 from typing import Tuple, Union, Iterable, TextIO
 
 from src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption

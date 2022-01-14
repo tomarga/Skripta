@@ -6,10 +6,10 @@ class API(Enum):
     Utility Enumeration of all speech recognition API types.
     """
 
-    GOOGLE = 1
-    GOOGLE_CLOUD = 2
-    SPHINX = 3
-    HOUNDIFY = 4
+    GOOGLE = 0
+    GOOGLE_CLOUD = 1
+    SPHINX = 2
+    HOUNDIFY = 3
 
     def __str__(self):
         """
