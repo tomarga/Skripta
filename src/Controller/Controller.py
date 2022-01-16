@@ -195,7 +195,7 @@ class Controller:
             toValidator.setMaxInput(formattedDuration)
 
         else:
-            self.view.optionsDialogUI.ToLineEdit.setText(0)
+            self.view.optionsDialogUI.ToLineEdit.setText('00:00:00')
 
     def enableOKButton(self, fileInput: str):
         """
@@ -231,11 +231,12 @@ class Controller:
         :return: The created list of arguments.
         """
 
-        args = []
+        # input type
+        args = ['file']
 
         # file
         filePath = self.view.optionsDialogUI.fileLineEdit.text()
-        args.append(filePath)
+        args.extend(('-f', filePath))
 
         # basic options
         fromInput = self.view.optionsDialogUI.FromLineEdit.text()
