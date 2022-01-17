@@ -8,6 +8,7 @@ from typing import Tuple, Union, Iterable, TextIO
 
 from src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
 from src.Model.Enums.API import API
+from src.Model.Utils.AlsaContext import hideAlsaErrors
 from src.main import ROOT_DIRECTORY
 
 
@@ -213,7 +214,8 @@ class Recognizer:
         :return:
         """
 
-        mic = sr.Microphone(device_index=self.micOptions.mic)
+        with hideAlsaErrors():
+            mic = sr.Microphone(device_index=self.micOptions.mic)
 
         # recognizer setup and listening
         try:
