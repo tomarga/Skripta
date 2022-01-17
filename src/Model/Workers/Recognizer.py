@@ -228,8 +228,8 @@ class Recognizer:
                                           snowboy_configuration=(ROOT_DIRECTORY.__str__() + '/venv/lib/python3.8/site-packages/snowboy-1.3.0-py3.8.egg/snowboy', [self.micOptions.hotwords]))
 
                 # saving audio to file
-                with open('/home/margarita/SkriptAudio/Novi.wav', 'wb') as file:
-                    file.write(audio.get_wav_data())
+                # with open('/home/margarita/Music/Novi_govor.wav', 'wb') as file:
+                #     file.write(audio.get_wav_data())
 
         except sr.WaitTimeoutError as e:
             sys.stderr.write("WaitTimeoutError - listen: " + e.__str__())
