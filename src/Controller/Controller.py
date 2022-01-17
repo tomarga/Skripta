@@ -1,15 +1,22 @@
 import os, subprocess, platform
 import datetime
 import time
+from typing import Union
 
 from PyQt6.QtCore import QProcess, QCoreApplication, QEvent, Qt
 from PyQt6.QtGui import QKeyEvent
+
+from src.View.FileOptionsDialog.FileOptionsDialog import Ui_OptionsDialog as Ui_FileOptionsDialog
+from src.View.MicOptionsDialog.MicOptionsDialog import Ui_OptionsDialog as Ui_MicOptionsDialog
 
 from src.Model.Enums.API import API
 from src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
 from src.View.Validators.DurationValidator import DurationValidator
 from src.View.View import View
 from src.Model.Model import Model
+
+
+OptionsDailogUI = Union[Ui_MicOptionsDialog, Ui_FileOptionsDialog]
 
 
 class Controller:
@@ -27,7 +34,6 @@ class Controller:
         self.view = view
         self.model = model
 
-        self.resultText = ""
         self.newFilePath = ""
 
         self.workerProcess = QProcess()
@@ -40,102 +46,186 @@ class Controller:
         :return:
         """
 
-        # main menu
-        self.view.menuWidgetUI.LoadButton.clicked.connect(lambda: self.view.openDialog(self.view.DialogType.LOAD_OPTIONS))
-
-        # options menu
-        self.view.optionsDialogUI.resetButton.clicked.connect(self.reset)
-
-        # file input option
-        self.view.optionsDialogUI.browseFileButton.clicked.connect(lambda: self.view.openDialog(self.view.DialogType.FILE_OPEN))
-        self.view.selectFileDialog.fileSelected.connect(self.updateFileInputLine)
-        self.view.optionsDialogUI.fileLineEdit.editingFinished.connect(self.setMaxDuration)
-        self.view.optionsDialogUI.fileLineEdit.textChanged.connect(self.enableOKButton)
-
-        # duration option
-        self.view.optionsDialogUI.FromLineEdit.editingFinished.connect(self.updateToValidator)
-        self.view.optionsDialogUI.ToLineEdit.editingFinished.connect(self.updateFromValidator)
-
-        # ambient noise option
-        self.view.optionsDialogUI.noiseTypeComboBox.currentTextChanged.connect(self.enableNoiseValue)
-
-        # api + language option
-        self.model.worker.finished.connect(lambda: self.updateLanguagesDropdown(self.view.optionsDialogUI.apiComboBox.currentText()))
-        self.view.optionsDialogUI.apiComboBox.currentTextChanged.connect(self.updateLanguagesDropdown)
-
-        # phrases + grammar
-        self.view.optionsDialogUI.apiComboBox.currentTextChanged.connect(self.enablePhrasesAndGrammar)
-        self.view.optionsDialogUI.browseGrammarButton.clicked.connect(lambda: self.view.openDialog(self.view.DialogType.GRAMMAR_OPEN))
-        self.view.selectGrammarDialog.fileSelected.connect(lambda file: self.view.optionsDialogUI.grammarLineEdit.setText(file))
-
-        # start transcription
-        self.view.optionsDialogUI.OKButton.clicked.connect(self.startFileTranscription)
-
+        # transcription options related signals and slots
+        self.connectMicOptionsSignalsAndSlots()
+        self.connectFileOptionsSignalsAndSlots()
+        self.connectCommonOptionsSignalsAndSlots()
+        # grammar
+        self.view.selectGrammarDialog.fileSelected.connect(self.updateGrammarText)
+        
         # processing
         self.view.processingDialogUI.StopButton.clicked.connect(self.workerProcess.kill)
-        self.view.processingDialogUI.StopButton.clicked.connect(lambda: self.view.closeDialog(self.view.DialogType.PROCESSING))
+        self.view.processingDialogUI.StopButton.clicked.connect(
+            lambda: self.view.closeDialog(self.view.DialogType.PROCESSING))
         self.view.processingDialog.rejected.connect(self.workerProcess.kill)
         self.view.processingDialog.rejected.connect(lambda: self.view.closeDialog(self.view.DialogType.PROCESSING))
 
         # handle result
-        self.workerProcess.readyReadStandardOutput.connect(self.handleSuccess)
+        self.workerProcess.readyReadStandardOutput.connect(self.handleResult)
         self.workerProcess.readyReadStandardError.connect(self.handleFailure)
+
+        self.view.resultDialogUI.saveButton.clicked.connect(self.startFileSave)
         self.view.saveFileDialog.fileSelected.connect(self.writeToFile)
 
         # success
         self.view.successDialogUI.OpenFileButton.clicked.connect(self.openNewFile)
-        self.view.successDialogUI.OpenFileButton.clicked.connect(lambda: self.view.closeDialog(self.view.DialogType.SUCCESS))
+        self.view.successDialogUI.OpenFileButton.clicked.connect(
+            lambda: self.view.closeDialog(self.view.DialogType.SUCCESS))
 
-    def enablePhrasesAndGrammar(self, api: str):
+    def connectFileOptionsSignalsAndSlots(self):
         """
-        Enables 'preferred phrases' option if the given api is Sphinx or Google Cloud.
-        Enables 'grammar' option if the given api is Sphinx.
-        :param api: str
+        Connects signals and slots specific to file input options.
         :return:
         """
+
+        # main menu
+        self.view.menuWidgetUI.LoadButton.clicked.connect(
+            lambda: self.view.openDialog(self.view.DialogType.FILE_OPTIONS))
+
+        # options menu
+        self.view.fileOptionsDialogUI.resetButton.clicked.connect(self.resetFileOptions)
+
+        # file input option
+        self.view.fileOptionsDialogUI.browseFileButton.clicked.connect(
+            lambda: self.view.openDialog(self.view.DialogType.FILE_OPEN))
+        self.view.selectFileDialog.fileSelected.connect(self.updateFileInputLine)
+        self.view.fileOptionsDialogUI.fileLineEdit.editingFinished.connect(self.setMaxDuration)
+        self.view.fileOptionsDialogUI.fileLineEdit.textChanged.connect(self.enableOKButton)
+
+        # duration option
+        self.view.fileOptionsDialogUI.FromLineEdit.editingFinished.connect(self.updateToValidator)
+        self.view.fileOptionsDialogUI.ToLineEdit.editingFinished.connect(self.updateFromValidator)
+
+        # start transcription
+        self.view.fileOptionsDialogUI.OKButton.clicked.connect(self.startFileTranscription)
+        
+    def connectMicOptionsSignalsAndSlots(self):
+        """
+        Connects signals and slots specific to mic input options.
+        :return: 
+        """
+
+        # main menu
+        self.view.menuWidgetUI.RecordButton.clicked.connect(
+            lambda: self.view.openDialog(self.view.DialogType.MIC_OPTIONS))
+        self.view.menuWidgetUI.RecordButton.clicked.connect(self.updateMicOptions)
+
+        # options menu
+        self.view.micOptionsDialogUI.resetButton.clicked.connect(self.resetMicOptions)
+
+        # hotwords
+        self.view.micOptionsDialogUI.browseHotwordsButton.clicked.connect(
+            lambda: self.view.openDialog(self.view.DialogType.HOTWORDS_OPEN))
+        self.view.selectHotwordDialog.fileSelected.connect(self.view.micOptionsDialogUI.hotwordsLineEdit.setText)
+
+        # start listening
+        self.view.micOptionsDialogUI.OKButton.clicked.connect(self.startListening)
+        
+    def connectCommonOptionsSignalsAndSlots(self):
+        """
+        Connects signals and slots related to transcription options that exist on both mic and file options dialogs.
+        :return: 
+        """
+
+        optionsDialogUis = [self.view.fileOptionsDialogUI, self.view.micOptionsDialogUI]
+        
+        for dialogUi in optionsDialogUis:
+            
+            # ambient noise option
+            dialogUi.noiseTypeComboBox.currentTextChanged.connect(
+                lambda noiseType, dialog=dialogUi: self.enableNoiseValue(noiseType, dialog))
+
+            # api + language option
+            self.model.worker.finished.connect(lambda languages, dialog=dialogUi: self.updateLanguagesDropdown(dialog))
+            dialogUi.apiComboBox.currentTextChanged.connect(lambda text, dialog=dialogUi: self.updateLanguagesDropdown(dialog))
+
+            # phrases + grammar
+            dialogUi.apiComboBox.currentTextChanged.connect(lambda text, dialog=dialogUi: self.enablePhrasesAndGrammar(dialog))
+
+            dialogUi.browseGrammarButton.clicked.connect(
+                lambda dialog=dialogUi: self.view.openDialog(self.view.DialogType.GRAMMAR_OPEN))
+
+    def updateMicOptions(self):
+        """
+        Updates the mic options dropdown with available microphone inputs.
+        :return:
+        """
+
+        self.view.micOptionsDialogUI.micComboBox.clear()
+        self.view.micOptionsDialogUI.micComboBox.addItems(self.model.getMicrophones())
+
+        # set to default mic
+        for index, mic in enumerate(self.model.getMicrophones()):
+            if 'default' in mic.lower():
+                self.view.micOptionsDialogUI.micComboBox.setCurrentIndex(index)
+                break
+
+    def updateGrammarText(self, text: str):
+        """
+        Update grammar line edit text on mic options or file options dialog, depending on which one is active.
+        :return:
+        """
+
+        if self.view.micOptionsDialog.isVisible():
+            self.view.micOptionsDialogUI.grammarLineEdit.setText(text)
+        elif self.view.fileOptionsDialog.isVisible():
+            self.view.fileOptionsDialogUI.grammarLineEdit.setText(text)
+
+    def enablePhrasesAndGrammar(self, optionsDialogUi: OptionsDailogUI):
+        """
+        Enables 'preferred phrases' option if the currently selected api is Sphinx or Google Cloud.
+        Enables 'grammar' option if the currently selected api is Sphinx.
+        :param optionsDialogUi: Mic or File options dialogs UI
+        :return:
+        """
+
+        api = optionsDialogUi.apiComboBox.currentText()
 
         isSphinx = 'sphinx' in api.lower()
 
-        self.view.optionsDialogUI.sensitivityLineEdit.setEnabled(isSphinx)
-        self.view.optionsDialogUI.grammarLineEdit.setEnabled(isSphinx)
-        self.view.optionsDialogUI.browseGrammarButton.setEnabled(isSphinx)
+        optionsDialogUi.sensitivityLineEdit.setEnabled(isSphinx)
+        optionsDialogUi.grammarLineEdit.setEnabled(isSphinx)
+        optionsDialogUi.browseGrammarButton.setEnabled(isSphinx)
 
         isSphinxOrCloud = isSphinx or 'cloud' in api.lower()
 
-        self.view.optionsDialogUI.phrasesTextEdit.setEnabled(isSphinxOrCloud)
+        optionsDialogUi.phrasesTextEdit.setEnabled(isSphinxOrCloud)
 
-    def updateLanguagesDropdown(self, api: str):
+    def updateLanguagesDropdown(self, optionsDialogUi: OptionsDailogUI):
         """
         Update supported languages dropdown based on the given api name.
         Set default language to English (US).
-        :param api: Name of the selected api.
+        :param optionsDialogUi: Mic or File options dialogs UI
         :return:
         """
 
-        self.view.optionsDialogUI.languageComboBox.clear()
+        api = optionsDialogUi.apiComboBox.currentText()
+
+        optionsDialogUi.languageComboBox.clear()
 
         if 'google' in api.lower():
             for index, language in enumerate(self.model.googleLanguages):
-                self.view.optionsDialogUI.languageComboBox.addItem(language[0], language[1])
+                optionsDialogUi.languageComboBox.addItem(language[0], language[1])
 
                 if language[1] == 'en-US':
-                    self.view.optionsDialogUI.languageComboBox.setCurrentIndex(index)
+                    optionsDialogUi.languageComboBox.setCurrentIndex(index)
 
         else:
-            self.view.optionsDialogUI.languageComboBox.addItem('English (United States)', 'en-US')
-            self.view.optionsDialogUI.languageComboBox.setCurrentIndex(0)
+            optionsDialogUi.languageComboBox.addItem('English (United States)', 'en-US')
+            optionsDialogUi.languageComboBox.setCurrentIndex(0)
 
-    def enableNoiseValue(self, noiseType: str):
+    def enableNoiseValue(self, noiseType: str, optionsDialogUi: OptionsDailogUI):
         """
         Enables noise value input if noise type parameter is set to 'Fiksan' or 'Hibridni'.
+        :param optionsDialogUi: Mic or File options dialogs UI
         :param noiseType:
         :return:
         """
 
         if noiseType == 'Dinamički':
-            self.view.optionsDialogUI.noiseValueLineEdit.setEnabled(False)
+            optionsDialogUi.noiseValueLineEdit.setEnabled(False)
         else:
-            self.view.optionsDialogUI.noiseValueLineEdit.setEnabled(True)
+            optionsDialogUi.noiseValueLineEdit.setEnabled(True)
 
     def updateToValidator(self):
         """
@@ -144,8 +234,8 @@ class Controller:
         :return:
         """
 
-        toValidator: DurationValidator = self.view.optionsDialogUI.ToLineEdit.validator()
-        toValidator.setMinInput(self.view.optionsDialogUI.FromLineEdit.text())
+        toValidator: DurationValidator = self.view.fileOptionsDialogUI.ToLineEdit.validator()
+        toValidator.setMinInput(self.view.fileOptionsDialogUI.FromLineEdit.text())
 
     def updateFromValidator(self):
         """
@@ -154,8 +244,8 @@ class Controller:
         :return:
         """
 
-        fromValidator: DurationValidator = self.view.optionsDialogUI.FromLineEdit.validator()
-        fromValidator.setMaxInput(self.view.optionsDialogUI.ToLineEdit.text())
+        fromValidator: DurationValidator = self.view.fileOptionsDialogUI.FromLineEdit.validator()
+        fromValidator.setMaxInput(self.view.fileOptionsDialogUI.ToLineEdit.text())
 
     def updateFileInputLine(self, fileInput: str):
         """
@@ -164,13 +254,13 @@ class Controller:
         :return:
         """
 
-        self.view.optionsDialogUI.fileLineEdit.setText(fileInput)
+        self.view.fileOptionsDialogUI.fileLineEdit.setText(fileInput)
 
         # mock 'enter' key press to trigger editFinished signal
-        self.view.optionsDialogUI.OKButton.setEnabled(False)
-        QCoreApplication.postEvent(self.view.optionsDialogUI.fileLineEdit,
+        self.view.fileOptionsDialogUI.OKButton.setEnabled(False)
+        QCoreApplication.postEvent(self.view.fileOptionsDialogUI.fileLineEdit,
                                    QKeyEvent(QEvent.Type.KeyPress, Qt.Key.Key_Return, Qt.KeyboardModifier.NoModifier))
-        self.view.optionsDialogUI.OKButton.setEnabled(True)
+        self.view.fileOptionsDialogUI.OKButton.setEnabled(True)
 
     def setMaxDuration(self):
         """
@@ -179,23 +269,23 @@ class Controller:
         :return:
         """
 
-        file = self.view.optionsDialogUI.fileLineEdit.text()
+        file = self.view.fileOptionsDialogUI.fileLineEdit.text()
         duration = self.model.getAudioDuration(file)
 
         if duration is not None:
             formattedDuration = time.strftime('%H:%M:%S', time.gmtime(duration))
-            self.view.optionsDialogUI.ToLineEdit.setText(formattedDuration)
-            self.view.optionsDialogUI.FromLineEdit.setText('00:00:00')
+            self.view.fileOptionsDialogUI.ToLineEdit.setText(formattedDuration)
+            self.view.fileOptionsDialogUI.FromLineEdit.setText('00:00:00')
 
             # update validators
-            fromValidator: DurationValidator = self.view.optionsDialogUI.FromLineEdit.validator()
+            fromValidator: DurationValidator = self.view.fileOptionsDialogUI.FromLineEdit.validator()
             fromValidator.setMaxInput(formattedDuration)
 
-            toValidator: DurationValidator = self.view.optionsDialogUI.ToLineEdit.validator()
+            toValidator: DurationValidator = self.view.fileOptionsDialogUI.ToLineEdit.validator()
             toValidator.setMaxInput(formattedDuration)
 
         else:
-            self.view.optionsDialogUI.ToLineEdit.setText(0)
+            self.view.fileOptionsDialogUI.ToLineEdit.setText('00:00:00')
 
     def enableOKButton(self, fileInput: str):
         """
@@ -205,9 +295,24 @@ class Controller:
         """
 
         if fileInput.__len__():
-            self.view.optionsDialogUI.OKButton.setEnabled(True)
+            self.view.fileOptionsDialogUI.OKButton.setEnabled(True)
         else:
-            self.view.optionsDialogUI.OKButton.setEnabled(False)
+            self.view.fileOptionsDialogUI.OKButton.setEnabled(False)
+
+    def startListening(self):
+        """
+        Slot that handles transcription from mic input.
+        The listening and transcription process is started in a separate process.
+        :return:
+        """
+
+        args = self.getMicWorkerArguments()
+        print(args)
+
+        from src.main import ROOT_DIRECTORY
+        self.workerProcess.start("python3", [ROOT_DIRECTORY.__str__() + "/src/Model/worker.py", *args])
+
+        self.view.openDialog(self.view.DialogType.LISTENING)
 
     def startFileTranscription(self):
         """
@@ -217,7 +322,7 @@ class Controller:
         :return:
         """
 
-        args = self.getWorkerArguments()
+        args = self.getFileWorkerArguments()
         print(args)
 
         from src.main import ROOT_DIRECTORY
@@ -225,65 +330,109 @@ class Controller:
 
         self.view.openDialog(self.view.DialogType.PROCESSING)
 
-    def getWorkerArguments(self):
+    def getFileWorkerArguments(self):
         """
-        Creates a list of command line inputs for worker process.
+        Creates a list of command line inputs for worker process in case of a file input.
         :return: The created list of arguments.
         """
 
-        args = []
+        # input type
+        args = ['file']
 
         # file
-        filePath = self.view.optionsDialogUI.fileLineEdit.text()
-        args.append(filePath)
+        filePath = self.view.fileOptionsDialogUI.fileLineEdit.text()
+        args.extend(('-f', filePath))
 
-        # basic options
-        fromInput = self.view.optionsDialogUI.FromLineEdit.text()
+        # from
+        fromInput = self.view.fileOptionsDialogUI.FromLineEdit.text()
         offset = datetime.datetime.strptime(fromInput, '%H:%M:%S').second
         args.extend(('-o', offset.__str__()))
 
-        toInput = self.view.optionsDialogUI.ToLineEdit.text()
+        # to
+        toInput = self.view.fileOptionsDialogUI.ToLineEdit.text()
         to = datetime.datetime.strptime(toInput, '%H:%M:%S').second
         duration = to - offset
         args.extend(('-d', duration.__str__()))
 
-        energyTypeInput = self.view.optionsDialogUI.noiseTypeComboBox.currentIndex()
+        # common
+        args.extend(self.getCommonWorkerArguments(self.view.fileOptionsDialogUI))
+
+        return args
+
+    def getMicWorkerArguments(self):
+        """
+        Creates a list of command line inputs for worker process in case of a mic input.
+        :return: The created list of arguments.
+        """
+
+        # input type
+        args = ['mic']
+
+        # microphone
+        mic = self.view.micOptionsDialogUI.micComboBox.currentIndex()
+        args.extend(('-m', mic.__str__()))
+
+        # duration
+        durationInput = self.view.micOptionsDialogUI.durationLineEdit.text()
+        duration = datetime.datetime.strptime(durationInput, '%H:%M:%S').second
+        args.extend(('-st', duration.__str__()))
+
+        # hotwords
+        hotword = self.view.micOptionsDialogUI.hotwordsLineEdit.text()
+        if len(hotword):
+            args.extend(('-hw', hotword))
+
+        # common
+        args.extend(self.getCommonWorkerArguments(self.view.micOptionsDialogUI))
+
+        return args
+    
+    def getCommonWorkerArguments(self, optionsDialogUi: OptionsDailogUI):
+        """
+        :param optionsDialogUi: mic or file options dialog's ui
+        :return: The list of command line arguments that are the same for both mic and file inputs.
+        """
+        
+        args = []
+
+        energyTypeInput = optionsDialogUi.noiseTypeComboBox.currentIndex()
         energyType = EnergyThresholdOption(energyTypeInput)
         args.extend(('-e', energyType.__str__()))
 
-        energyValue = self.view.optionsDialogUI.noiseValueLineEdit.text()
+        energyValue = optionsDialogUi.noiseValueLineEdit.text()
         if energyValue.__len__():
             args.extend(('-sv', energyValue.__str__()))
 
         # api specific options
-        apiValue = self.view.optionsDialogUI.apiComboBox.currentIndex()
+        apiValue = optionsDialogUi.apiComboBox.currentIndex()
         api = API(apiValue)
         args.extend(('-a', api.__str__()))
 
-        language = self.view.optionsDialogUI.languageComboBox.currentData()
+        language = optionsDialogUi.languageComboBox.currentData()
         args.extend(('-l', language.__str__()))
 
-        phrasesArgs = self.getPhrasesArguments()
+        phrasesArgs = self.getPhrasesArguments(optionsDialogUi)
         args.extend(phrasesArgs)
 
-        grammarInput = self.view.optionsDialogUI.grammarLineEdit.text()
-        if len(grammarInput) and self.view.optionsDialogUI.grammarLineEdit.isEnabled():
+        grammarInput = optionsDialogUi.grammarLineEdit.text()
+        if len(grammarInput) and optionsDialogUi.grammarLineEdit.isEnabled():
             args.extend(('-g', grammarInput))
 
         return args
-
-    def getPhrasesArguments(self):
+        
+    def getPhrasesArguments(self, optionsDialogUi: OptionsDailogUI):
         """
+        :param optionsDialogUi: mic or file options dialog's ui
         :return: The list of worker's command line arguments related to preferred phrases.
         """
 
         args = []
 
-        if self.view.optionsDialogUI.phrasesTextEdit.isEnabled():
+        if optionsDialogUi.phrasesTextEdit.isEnabled():
             phrasesList = []
             valuesList = []
 
-            phrasesInput = self.view.optionsDialogUI.phrasesTextEdit.toPlainText()
+            phrasesInput = optionsDialogUi.phrasesTextEdit.toPlainText()
 
             lines = phrasesInput.split('\n')
 
@@ -291,11 +440,11 @@ class Controller:
                 if len(line) > 0:
                     phrasesList.append(line.strip())
 
-            if self.view.optionsDialogUI.sensitivityLineEdit.isEnabled():
+            if optionsDialogUi.sensitivityLineEdit.isEnabled():
 
                 phrasesList = []
 
-                fallbackSensibility = self.view.optionsDialogUI.sensitivityLineEdit.text()
+                fallbackSensibility = optionsDialogUi.sensitivityLineEdit.text()
                 if not self.isSensibilityInputValid(fallbackSensibility):
                     fallbackSensibility = "1"
 
@@ -325,8 +474,7 @@ class Controller:
 
         return args
 
-    @staticmethod
-    def isSensibilityInputValid(input: str):
+    def isSensibilityInputValid(self, input: str):
         """
         Check if the given input represents a float value greater than 0 and less than 1.
         :param input:
@@ -344,21 +492,30 @@ class Controller:
 
         return True
 
-    def handleSuccess(self):
+    def handleResult(self):
         """
-        Handles the successful transcription.
-        Updates the resultText attribute with the parsed data from the worker's standard output channel.
-        Closes the processing dialog and opens a file save dialog.
+        Handles the output of worker process.
+        If the output indicates that the listening process is over, the message in the processing dialog is updated appropriately.
+        If the output contains the resulting script, the textarea in the result dialog is filled with the parsed data
+        from the worker's standard output channel and the result dialog replaces the processing dialog.
         :return:
         """
 
         resultData = self.workerProcess.readAllStandardOutput()
-        self.resultText = bytes(resultData).decode("utf8")
+        resultText = bytes(resultData).decode("utf8")
+
+        print('worker output:', resultText)
+
+        # handle end of listening
+        if resultText == "Done listening":
+            self.view.openDialog(self.view.DialogType.PROCESSING)
+            return
+
+        # handle end of transcription
+        self.view.resultDialogUI.resultTextEdit.setPlainText(resultText)
 
         self.view.closeDialog(self.view.DialogType.PROCESSING)
-
-        self.model.createResultDirectory()
-        self.view.openDialog(self.view.DialogType.FILE_SAVE)
+        self.view.openDialog(self.view.DialogType.RESULT)
 
     def handleFailure(self):
         """
@@ -370,14 +527,24 @@ class Controller:
         errorData = self.workerProcess.readAllStandardError()
         errorText = bytes(errorData).decode("utf8")
 
+        print('error:', errorText)
+
         # ignore debug.info outputs
         if "INFO:" in errorText:
             return
 
+        # ignore alsa outputs
+        if "ALSA" in errorText:
+            return
+
+        # closes processing dialog and kills the process
         self.view.closeDialog(self.view.DialogType.PROCESSING)
 
         if "OSError" in errorText:
             self.view.openDialog(self.view.DialogType.UNAUTHORISED)
+
+        elif "ValueError - Mic as Source: " in errorText:
+            self.view.openDialog(self.view.DialogType.MIC_NOT_FOUND)
 
         elif "UnknownValueError" in errorText:
             self.view.openDialog(self.view.DialogType.DAMAGED_FILE)
@@ -388,6 +555,9 @@ class Controller:
         elif "RequestError" in errorText:
             self.view.openDialog(self.view.DialogType.FAILED_REQUEST)
 
+        elif "WaitTimeoutError - listen" in errorText:
+            self.view.openDialog(self.view.DialogType.LISTENING_TIMED_OUT)
+
         elif "Timeout" in errorText:
             self.view.openDialog(self.view.DialogType.TIMED_OUT)
 
@@ -395,13 +565,23 @@ class Controller:
             self.view.openDialog(self.view.DialogType.FILE_NOT_FOUND)
 
         else:
-            self.view.errorDialogUI.setText('Greška!')
+            print('Undefined error.')
+            self.view.errorDialogUI.setText(self.view.DialogType.getMessageHTML('Greška!'))
             self.view.errorDialog.open()
-            print('Undefined error.', errorText)
+
+    def startFileSave(self):
+        """
+        Creates the result directory if needed and opens the file save dialog.
+        :return:
+        """
+
+        self.model.createResultDirectory()
+        self.view.openDialog(self.view.DialogType.FILE_SAVE)
 
     def writeToFile(self, filePath: str):
         """
         If the given filePath is valid, the result text is written into it.
+        If successful, the success dialog is opened, and the result dialog closed.
         :param filePath: Path to a textual file.
         :return:
         """
@@ -412,8 +592,10 @@ class Controller:
         self.newFilePath = filePath
 
         with open(filePath, 'w') as file:
-            file.write(self.resultText)
+            file.write(self.view.resultDialogUI.resultTextEdit.toPlainText())
 
+        self.view.closeDialog(self.view.DialogType.RESULT)
+        self.view.resultDialog.accept()
         self.view.openDialog(self.view.DialogType.SUCCESS)
 
     def openNewFile(self):
@@ -429,21 +611,47 @@ class Controller:
         else:  # linux
             subprocess.call(('xdg-open', self.newFilePath))
 
-    def reset(self):
+    def resetFileOptions(self):
         """
-        Resets the statuses/UI elements from previous transcription process.
-        Closes all dialogs and resets newFilePath and resultText attributes.
+        Resets the statuses/UI elements from previous transcription from file process.
+        Sets the newFilePath attribute to an empty string.
         :return:
         """
 
         self.newFilePath = ""
-        self.resultText = ""
 
-        self.view.optionsDialogUI.fileLineEdit.clear()
-        self.view.optionsDialogUI.FromLineEdit.setText('00:00:00')
-        self.view.optionsDialogUI.ToLineEdit.setText('00:00:00')
-        self.view.optionsDialogUI.noiseTypeComboBox.setCurrentIndex(0)
-        self.view.optionsDialogUI.noiseValueLineEdit.clear()
-        self.view.optionsDialogUI.apiComboBox.setCurrentIndex(0)
-        self.updateLanguagesDropdown('Google')
-        self.view.optionsDialogUI.grammarLineEdit.clear()
+        self.view.fileOptionsDialogUI.fileLineEdit.clear()
+        self.view.fileOptionsDialogUI.FromLineEdit.setText('00:00:00')
+        self.view.fileOptionsDialogUI.ToLineEdit.setText('00:00:00')
+
+        self.resetCommonOptions(self.view.fileOptionsDialogUI)
+
+    def resetMicOptions(self):
+        """
+        Resets the statuses/UI elements from previous transcription from mic input process.
+        Sets the newFilePath attribute to an empty string.
+        :return:
+        """
+
+        self.newFilePath = ""
+
+        self.updateMicOptions()
+        self.view.micOptionsDialogUI.durationLineEdit.setText('00:00:05')
+        self.view.micOptionsDialogUI.hotwordsLineEdit.clear()
+
+        self.resetCommonOptions(self.view.micOptionsDialogUI)
+        
+    def resetCommonOptions(self, dialogUi: OptionsDailogUI):
+        """
+        Resets all common file/mic options in the given dialog.
+        :param dialogUi: File or mic options dialog's ui
+        :return: 
+        """
+
+        dialogUi.noiseTypeComboBox.setCurrentIndex(0)
+        dialogUi.noiseValueLineEdit.clear()
+        dialogUi.apiComboBox.setCurrentIndex(0)
+        self.updateLanguagesDropdown(dialogUi)
+        dialogUi.phrasesTextEdit.clear()
+        dialogUi.sensitivityLineEdit.clear()
+        dialogUi.grammarLineEdit.clear()

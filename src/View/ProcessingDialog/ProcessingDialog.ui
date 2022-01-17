@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>577</width>
-    <height>253</height>
+    <width>570</width>
+    <height>226</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,22 @@
 	background-color: rgb(84, 84, 84)
 }</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1">
+   <property name="spacing">
+    <number>20</number>
+   </property>
+   <property name="leftMargin">
+    <number>15</number>
+   </property>
+   <property name="topMargin">
+    <number>20</number>
+   </property>
+   <property name="rightMargin">
+    <number>15</number>
+   </property>
+   <property name="bottomMargin">
+    <number>20</number>
+   </property>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="enabled">
@@ -76,8 +91,8 @@
      <widget class="QLabel" name="ProcessingAnimationLabel">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>0</y>
+        <x>0</x>
+        <y>-10</y>
         <width>541</width>
         <height>200</height>
        </rect>
@@ -94,24 +109,42 @@
         <height>200</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel#ProcessingAnimationLabel {
+    padding-right: 20px;
+    padding-bottom: 35px;
+}</string>
+      </property>
       <property name="text">
        <string/>
       </property>
       <property name="scaledContents">
        <bool>false</bool>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="StopButton">
-     <property name="styleSheet">
-      <string notr="true">QPushButton#StopButton {
-	margin-left: 180px;
-	margin-right: 180px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="StopButton">
+       <property name="minimumSize">
+        <size>
+         <width>135</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>135</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#StopButton {
 	border-radius: 6px;
 	border: 3px solid #9C8ABF;
 
@@ -127,11 +160,19 @@ QPushButton#StopButton:hover {
 QPushButton#StopButton:pressed {
 	background-color: rgb(70, 70, 70)
 }</string>
-     </property>
-     <property name="text">
-      <string>Stop</string>
-     </property>
-    </widget>
+       </property>
+       <property name="inputMethodHints">
+        <set>Qt::ImhHiddenText</set>
+       </property>
+       <property name="text">
+        <string>Stop</string>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

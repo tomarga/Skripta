@@ -4,6 +4,7 @@ from pathlib import Path
 import speech_recognition as sr
 from PyQt6.QtCore import QThread
 
+from src.Model.Utils.AlsaContext import hideAlsaErrors
 from src.Model.Workers.LanguagesLookup import LanguagesLookup
 
 
@@ -76,3 +77,12 @@ class Model:
         except ValueError as e:
             print('ValueError - Audio Duration: ', e.__str__())
             return None
+
+    @staticmethod
+    def getMicrophones():
+        """
+        :return: The list of available microphone inputs.
+        """
+
+        with hideAlsaErrors():
+            return sr.Microphone.list_microphone_names()
