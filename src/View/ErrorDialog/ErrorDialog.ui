@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>577</width>
-    <height>250</height>
+    <width>570</width>
+    <height>225</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,16 +25,22 @@
 	background-color: rgb(84, 84, 84)
 }</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1">
+   <property name="leftMargin">
+    <number>15</number>
+   </property>
+   <property name="topMargin">
+    <number>20</number>
+   </property>
+   <property name="rightMargin">
+    <number>15</number>
+   </property>
+   <property name="bottomMargin">
+    <number>20</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
-      <number>5</number>
-     </property>
-     <property name="leftMargin">
-      <number>20</number>
-     </property>
-     <property name="rightMargin">
       <number>20</number>
      </property>
      <item>
@@ -43,7 +49,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../../resources/icons/error.png</pixmap>
+        <pixmap>../../../resources/icons/error.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -52,6 +58,12 @@
      </item>
      <item>
       <widget class="QLabel" name="ErrorMessageLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="styleSheet">
         <string notr="true">QLabel#ErrorMessageLabel {
 	color: white;
@@ -59,22 +71,43 @@
 }</string>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Izabrana datoteka nije među podržanim formatima:&lt;br&gt;
-WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Izabrana datoteka nije među podržanim formatima:&lt;br/&gt;WAV (PCM/LPCM), FLAC (nativni), AIFF i AIFF-C.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QPushButton" name="OKButton">
-     <property name="styleSheet">
-      <string notr="true">QPushButton#OKButton {
-	margin-left: 180px;
-	margin-right: 180px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="OKButton">
+       <property name="minimumSize">
+        <size>
+         <width>135</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#OKButton {
 	border-radius: 6px;
 	border: 3px solid #54a4a6;
 
@@ -90,11 +123,13 @@ QPushButton#OKButton:hover {
 QPushButton#OKButton:pressed {
 	background-color: rgb(70, 70, 70)
 }</string>
-     </property>
-     <property name="text">
-      <string>U redu</string>
-     </property>
-    </widget>
+       </property>
+       <property name="text">
+        <string>U redu</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

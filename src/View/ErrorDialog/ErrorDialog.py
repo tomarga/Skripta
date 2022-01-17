@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'src/ErrorDialog/ErrorDialog.ui'
+# Form implementation generated from reading ui file 'src/View/ErrorDialog/ErrorDialog.ui'
 #
 # Created by: PyQt6 UI code generator 6.1.0
 #
@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_ErrorDialog(object):
     def setupUi(self, ErrorDialog):
         ErrorDialog.setObjectName("ErrorDialog")
-        ErrorDialog.resize(577, 250)
+        ErrorDialog.resize(570, 225)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../resources/icons/error.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         ErrorDialog.setWindowIcon(icon)
@@ -21,10 +21,10 @@ class Ui_ErrorDialog(object):
 "    background-color: rgb(84, 84, 84)\n"
 "}")
         self.verticalLayout = QtWidgets.QVBoxLayout(ErrorDialog)
+        self.verticalLayout.setContentsMargins(15, 20, 15, 20)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(20, -1, 20, -1)
-        self.horizontalLayout.setSpacing(1)
+        self.horizontalLayout.setSpacing(20)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.ErrorIconLabel = QtWidgets.QLabel(ErrorDialog)
         self.ErrorIconLabel.setText("")
@@ -33,20 +33,27 @@ class Ui_ErrorDialog(object):
         self.ErrorIconLabel.setObjectName("ErrorIconLabel")
         self.horizontalLayout.addWidget(self.ErrorIconLabel)
         self.ErrorMessageLabel = QtWidgets.QLabel(ErrorDialog)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.ErrorMessageLabel.sizePolicy().hasHeightForWidth())
+        self.ErrorMessageLabel.setSizePolicy(sizePolicy)
         self.ErrorMessageLabel.setStyleSheet("QLabel#ErrorMessageLabel {\n"
 "    color: white;\n"
 "    font-size: 16px;\n"
 "}")
+        self.ErrorMessageLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.ErrorMessageLabel.setWordWrap(True)
         self.ErrorMessageLabel.setObjectName("ErrorMessageLabel")
         self.horizontalLayout.addWidget(self.ErrorMessageLabel)
         self.verticalLayout.addLayout(self.horizontalLayout)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
         self.OKButton = QtWidgets.QPushButton(ErrorDialog)
+        self.OKButton.setMinimumSize(QtCore.QSize(135, 30))
         self.OKButton.setStyleSheet("QPushButton#OKButton {\n"
-"    margin-left: 180px;\n"
-"    margin-right: 180px;\n"
-"    padding-top: 10px;\n"
-"    padding-bottom: 10px;\n"
-"\n"
 "    border-radius: 6px;\n"
 "    border: 3px solid #54a4a6;\n"
 "\n"
@@ -63,7 +70,10 @@ class Ui_ErrorDialog(object):
 "    background-color: rgb(70, 70, 70)\n"
 "}")
         self.OKButton.setObjectName("OKButton")
-        self.verticalLayout.addWidget(self.OKButton)
+        self.horizontalLayout_2.addWidget(self.OKButton)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.verticalLayout.setStretch(0, 3)
+        self.verticalLayout.setStretch(1, 1)
 
         self.retranslateUi(ErrorDialog)
         self.OKButton.clicked.connect(ErrorDialog.close)

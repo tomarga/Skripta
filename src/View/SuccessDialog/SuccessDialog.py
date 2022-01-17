@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'src/SuccessDialog/SuccessDialog.ui'
+# Form implementation generated from reading ui file 'src/View/SuccessDialog/SuccessDialog.ui'
 #
 # Created by: PyQt6 UI code generator 6.1.0
 #
@@ -12,33 +12,39 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_SuccessDialog(object):
     def setupUi(self, SuccessDialog):
         SuccessDialog.setObjectName("SuccessDialog")
-        SuccessDialog.resize(577, 250)
+        SuccessDialog.resize(570, 225)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("src/SuccessDialog/../../../../../../resources/icons/error.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap("src/View/SuccessDialog/../../../../../../resources/icons/error.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         SuccessDialog.setWindowIcon(icon)
         SuccessDialog.setAccessibleName("")
         SuccessDialog.setStyleSheet("QDialog#SuccessDialog {\n"
 "    background-color: rgb(84, 84, 84)\n"
 "}")
         self.verticalLayout = QtWidgets.QVBoxLayout(SuccessDialog)
-        self.verticalLayout.setSpacing(45)
+        self.verticalLayout.setContentsMargins(15, 20, 15, 20)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetMaximumSize)
-        self.horizontalLayout.setContentsMargins(20, 25, 50, -1)
-        self.horizontalLayout.setSpacing(4)
+        self.horizontalLayout.setContentsMargins(0, -1, 0, -1)
+        self.horizontalLayout.setSpacing(20)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.SuccessIconLabel = QtWidgets.QLabel(SuccessDialog)
+        self.SuccessIconLabel.setMaximumSize(QtCore.QSize(100, 16777215))
         self.SuccessIconLabel.setText("")
         self.SuccessIconLabel.setPixmap(QtGui.QPixmap("../resources/icons/success.png"))
         self.SuccessIconLabel.setScaledContents(False)
         self.SuccessIconLabel.setObjectName("SuccessIconLabel")
         self.horizontalLayout.addWidget(self.SuccessIconLabel)
         self.SuccessMessageLabel = QtWidgets.QLabel(SuccessDialog)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.SuccessMessageLabel.sizePolicy().hasHeightForWidth())
+        self.SuccessMessageLabel.setSizePolicy(sizePolicy)
         self.SuccessMessageLabel.setStyleSheet("QLabel#SuccessMessageLabel {\n"
 "    color: white;\n"
 "    font-size: 16px;\n"
 "}")
+        self.SuccessMessageLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.SuccessMessageLabel.setObjectName("SuccessMessageLabel")
         self.horizontalLayout.addWidget(self.SuccessMessageLabel)
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -46,12 +52,11 @@ class Ui_SuccessDialog(object):
         self.horizontalLayout_2.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetMinimumSize)
         self.horizontalLayout_2.setSpacing(15)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
         self.OpenFileButton = QtWidgets.QPushButton(SuccessDialog)
+        self.OpenFileButton.setMinimumSize(QtCore.QSize(135, 30))
         self.OpenFileButton.setStyleSheet("QPushButton#OpenFileButton {\n"
-"    margin-left: 100px;\n"
-"    padding-top: 10px;\n"
-"    padding-bottom: 10px;\n"
-"\n"
 "    border-radius: 6px;\n"
 "    border: 3px solid #9C8ABF;\n"
 "\n"
@@ -70,11 +75,8 @@ class Ui_SuccessDialog(object):
         self.OpenFileButton.setObjectName("OpenFileButton")
         self.horizontalLayout_2.addWidget(self.OpenFileButton)
         self.OKButton = QtWidgets.QPushButton(SuccessDialog)
+        self.OKButton.setMinimumSize(QtCore.QSize(135, 30))
         self.OKButton.setStyleSheet("QPushButton#OKButton {\n"
-"    margin-right: 100px;\n"
-"    padding-top: 10px;\n"
-"    padding-bottom: 10px;\n"
-"\n"
 "    border-radius: 6px;\n"
 "    border: 3px solid #54a4a6;\n"
 "\n"
@@ -93,6 +95,8 @@ class Ui_SuccessDialog(object):
         self.OKButton.setObjectName("OKButton")
         self.horizontalLayout_2.addWidget(self.OKButton)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.verticalLayout.setStretch(0, 3)
+        self.verticalLayout.setStretch(1, 1)
 
         self.retranslateUi(SuccessDialog)
         self.OKButton.clicked.connect(SuccessDialog.close)
@@ -101,7 +105,7 @@ class Ui_SuccessDialog(object):
     def retranslateUi(self, SuccessDialog):
         _translate = QtCore.QCoreApplication.translate
         SuccessDialog.setWindowTitle(_translate("SuccessDialog", "Uspjeh"))
-        self.SuccessMessageLabel.setText(_translate("SuccessDialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt;\">Audio datoteka je uspješno transkribirana!</span></p></body></html>"))
+        self.SuccessMessageLabel.setText(_translate("SuccessDialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt;\">Nova skripta je uspješno spremljena!</span></p></body></html>"))
         self.OpenFileButton.setText(_translate("SuccessDialog", "Otvori"))
         self.OKButton.setText(_translate("SuccessDialog", "U redu"))
 
