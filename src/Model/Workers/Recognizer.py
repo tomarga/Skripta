@@ -14,7 +14,7 @@ from src.main import ROOT_DIRECTORY
 
 class Recognizer:
     """
-    A class that handles the speech recognition process, based on various options.
+    A class that handles the listening and/or speech recognition process, based on various options.
     """
 
     class MicOptions:
@@ -223,9 +223,14 @@ class Recognizer:
                 recognizer = self.initRecognizer(source)
                 recognizer.pause_threshold = 300  # stop listening after 5 mins of silence
 
+                # setup hotwords conf
+                snowboyDirectory = ROOT_DIRECTORY.__str__() + '/venv/lib/python3.8/site-packages/snowboy-1.3.0-py3.8.egg/snowboy'
+                hotwordsConf = (snowboyDirectory, [self.micOptions.hotwords]) if self.micOptions.hotwords is not None else None
+
                 # trigger timeout error if no speech is detected for 5 mins
-                audio = recognizer.listen(source, timeout=300, phrase_time_limit=self.micOptions.speechTimeout,
-                                          snowboy_configuration=(ROOT_DIRECTORY.__str__() + '/venv/lib/python3.8/site-packages/snowboy-1.3.0-py3.8.egg/snowboy', [self.micOptions.hotwords]))
+                audio = recognizer.listen(source, timeout=300, phrase_time_limit=self.micOptions.speechTimeout, snowboy_configuration=hotwordsConf)
+
+                sys.stdout.write("Done listening")
 
                 # saving audio to file
                 # with open('/home/margarita/Music/Novi_govor.wav', 'wb') as file:
@@ -236,7 +241,7 @@ class Recognizer:
             return
 
         except ValueError as e:
-            sys.stderr.write("ValueError - Audio as Source: " + e.__str__())
+            sys.stderr.write("ValueError - Mic as Source: " + e.__str__())
             return
 
         except FileNotFoundError as e:
