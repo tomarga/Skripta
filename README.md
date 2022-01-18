@@ -1,6 +1,6 @@
 ## Skripta
-- Desktop aplikacija koja služi za stvaranje tranksripata matematičkog sadržaja. 
-- Ulazni zapis može biti govor koji se prenosi mikrofonom ili gotova video/audio datoteka. 
+- Desktop aplikacija koja služi za stvaranje transkripata. 
+- Ulazni zapis može biti govor koji se prenosi mikrofonom ili gotova audio datoteka. 
 <br>
 
 ***
