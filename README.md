@@ -2,7 +2,6 @@
 - Desktop aplikacija koja služi za stvaranje transkripata. 
 - Ulazni zapis može biti govor koji se prenosi mikrofonom ili gotova audio datoteka. 
 
-
 ### Instalacija
 - **Linux Ubuntu 20.04 (i noviji)**
 - preuzeti zapakiranu datoteku ```skripta.tar.gz``` i raspakirati je na željeno mjesto
