@@ -1,15 +1,17 @@
 import json
 import socket
 import sys
+from pathlib import Path
+from time import sleep
 
 import speech_recognition as sr
 
 from typing import Tuple, Union, Iterable, TextIO
 
-from src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
-from src.Model.Enums.API import API
-from src.Model.Utils.AlsaContext import hideAlsaErrors
-from src.main import ROOT_DIRECTORY
+from skripta.src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
+from skripta.src.Model.Enums.API import API
+from skripta.src.Model.Utils.AlsaContext import hideAlsaErrors
+from skripta.src.__main__ import ROOT_DIRECTORY
 
 
 class Recognizer:
@@ -80,6 +82,7 @@ class Recognizer:
             self.api = api
             self.language = language
             self.phrases = phrases
+            self.grammar = grammar
             self.grammar = grammar
 
             # print(energyOption, energyValue, api, language, phrases, grammar)
@@ -163,13 +166,15 @@ class Recognizer:
 
         env = None
         try:
-            env = open(ROOT_DIRECTORY.__str__() + "/env.json", 'r')
+            env = open(ROOT_DIRECTORY.parent.__str__() + "/env.json", 'r')
         except OSError as e:
             sys.stderr.write("OSError - env file: " + e.__str__())
 
         try:
             resultData = self.getAPIResult(recognizer, audio, env)
             sys.stdout.write(resultData)
+            sys.stdout.flush()
+            # print(resultData)
 
         except AssertionError as e:
             sys.stderr.write("AssertionError - Transcription: " + e.__str__())
@@ -224,13 +229,17 @@ class Recognizer:
                 recognizer.pause_threshold = 300  # stop listening after 5 mins of silence
 
                 # setup hotwords conf
-                snowboyDirectory = ROOT_DIRECTORY.__str__() + '/venv/lib/python3.8/site-packages/snowboy-1.3.0-py3.8.egg/snowboy'
+                # snowboyDirectory = ROOT_DIRECTORY.parent.__str__() + '/venv/lib/python3.8/site-packages/snowboy-1.3.0-py3.8.egg/snowboy'
+
+                snowboyDirectory = ROOT_DIRECTORY.parent.__str__() + '/snowboy'
+
                 hotwordsConf = (snowboyDirectory, [self.micOptions.hotwords]) if self.micOptions.hotwords is not None else None
 
                 # trigger timeout error if no speech is detected for 5 mins
                 audio = recognizer.listen(source, timeout=300, phrase_time_limit=self.micOptions.speechTimeout, snowboy_configuration=hotwordsConf)
 
                 sys.stdout.write("Done listening")
+                sys.stdout.flush()
 
                 # saving audio to file
                 # with open('/home/margarita/Music/Novi_govor.wav', 'wb') as file:

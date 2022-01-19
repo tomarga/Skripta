@@ -1,19 +1,20 @@
 import os, subprocess, platform
 import datetime
+import sys
 import time
 from typing import Union
 
 from PyQt6.QtCore import QProcess, QCoreApplication, QEvent, Qt
 from PyQt6.QtGui import QKeyEvent
 
-from src.View.FileOptionsDialog.FileOptionsDialog import Ui_OptionsDialog as Ui_FileOptionsDialog
-from src.View.MicOptionsDialog.MicOptionsDialog import Ui_OptionsDialog as Ui_MicOptionsDialog
+from skripta.src.View.FileOptionsDialog.FileOptionsDialog import Ui_OptionsDialog as Ui_FileOptionsDialog
+from skripta.src.View.MicOptionsDialog.MicOptionsDialog import Ui_OptionsDialog as Ui_MicOptionsDialog
 
-from src.Model.Enums.API import API
-from src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
-from src.View.Validators.DurationValidator import DurationValidator
-from src.View.View import View
-from src.Model.Model import Model
+from skripta.src.Model.Enums.API import API
+from skripta.src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
+from skripta.src.View.Validators.DurationValidator import DurationValidator
+from skripta.src.View.View import View
+from skripta.src.Model.Model import Model
 
 
 OptionsDailogUI = Union[Ui_MicOptionsDialog, Ui_FileOptionsDialog]
@@ -309,8 +310,10 @@ class Controller:
         args = self.getMicWorkerArguments()
         print(args)
 
-        from src.main import ROOT_DIRECTORY
-        self.workerProcess.start("python3", [ROOT_DIRECTORY.__str__() + "/src/Model/worker.py", *args])
+        # from skripta.src.__main__ import ROOT_DIRECTORY
+        # self.workerProcess.start("python3", [ROOT_DIRECTORY.__str__() + "/src/Model/worker.py", *args])
+
+        self.workerProcess.start('worker-cli', [*args])
 
         self.view.openDialog(self.view.DialogType.LISTENING)
 
@@ -325,8 +328,10 @@ class Controller:
         args = self.getFileWorkerArguments()
         print(args)
 
-        from src.main import ROOT_DIRECTORY
-        self.workerProcess.start("python3", [ROOT_DIRECTORY.__str__() + "/src/Model/worker.py", *args])
+        # from skripta.src.__main__ import ROOT_DIRECTORY
+        # self.workerProcess.start("python3", [ROOT_DIRECTORY.__str__() + "/src/Model/worker.py", *args])
+
+        self.workerProcess.start('worker-cli', [*args])
 
         self.view.openDialog(self.view.DialogType.PROCESSING)
 
@@ -337,7 +342,7 @@ class Controller:
         """
 
         # input type
-        args = ['file']
+        args = ['-i', 'file']
 
         # file
         filePath = self.view.fileOptionsDialogUI.fileLineEdit.text()
@@ -366,7 +371,7 @@ class Controller:
         """
 
         # input type
-        args = ['mic']
+        args = ['-i', 'mic']
 
         # microphone
         mic = self.view.micOptionsDialogUI.micComboBox.currentIndex()

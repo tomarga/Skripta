@@ -1,8 +1,10 @@
+from skripta.src.__main__ import main
+
 import argparse
 
-from src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
-from src.Model.Enums.API import API
-from src.Model.Workers.Recognizer import Recognizer
+from skripta.src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
+from skripta.src.Model.Enums.API import API
+from skripta.src.Model.Workers.Recognizer import Recognizer
 
 
 def setupParser():
@@ -14,7 +16,7 @@ def setupParser():
     newParser = argparse.ArgumentParser()
 
     # input type
-    newParser.add_argument("input", type=str, help="the input type, should be 'file' or 'mic")
+    newParser.add_argument("-i", "--input", type=str, help="the input type, should be 'file' or 'mic")
 
     # file options
     newParser.add_argument("-f", "--file", type=str, help="the audio file path")
@@ -82,7 +84,22 @@ if __name__ == '__main__':
     parser = setupParser()
     args = parser.parse_args()
 
-    options = getTranscriptionOptions()
+    if not args.input or args.input is None:
+        main()
 
-    worker = Recognizer(*options)
-    worker.run()
+    else:
+        options = getTranscriptionOptions()
+        worker = Recognizer(*options)
+        worker.run()
+
+
+
+
+
+
+
+
+
+# if __name__ == '__main__':
+#     main()
+

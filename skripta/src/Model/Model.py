@@ -4,8 +4,8 @@ from pathlib import Path
 import speech_recognition as sr
 from PyQt6.QtCore import QThread
 
-from src.Model.Utils.AlsaContext import hideAlsaErrors
-from src.Model.Workers.LanguagesLookup import LanguagesLookup
+from skripta.src.Model.Utils.AlsaContext import hideAlsaErrors
+from skripta.src.Model.Workers.LanguagesLookup import LanguagesLookup
 
 
 class Model:

@@ -5,11 +5,11 @@ from pathlib import Path
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QApplication
 
-from src.View.View import View
-from src.Model.Model import Model
-from src.Controller.Controller import Controller
+from skripta.src.View.View import View
+from skripta.src.Model.Model import Model
+from skripta.src.Controller.Controller import Controller
 
-# Absolute path to app root dir
+# Absolute path to app root dir ('skripta')
 ROOT_DIRECTORY = Path(__file__).resolve().parent.parent
 
 
@@ -22,7 +22,7 @@ def setupResources():
     QtCore.QDir.addSearchPath('images', os.fspath(ROOT_DIRECTORY / "resources/images"))
 
 
-if __name__ == '__main__':
+def main():
     """
     Main function.
     Connects the parts of MVC pattern and starts the app.

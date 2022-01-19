@@ -30,7 +30,7 @@ class Ui_SuccessDialog(object):
         self.SuccessIconLabel = QtWidgets.QLabel(SuccessDialog)
         self.SuccessIconLabel.setMaximumSize(QtCore.QSize(100, 16777215))
         self.SuccessIconLabel.setText("")
-        self.SuccessIconLabel.setPixmap(QtGui.QPixmap("../resources/icons/success.png"))
+        self.SuccessIconLabel.setPixmap(QtGui.QPixmap("skripta/resources/icons/success.png"))
         self.SuccessIconLabel.setScaledContents(False)
         self.SuccessIconLabel.setObjectName("SuccessIconLabel")
         self.horizontalLayout.addWidget(self.SuccessIconLabel)

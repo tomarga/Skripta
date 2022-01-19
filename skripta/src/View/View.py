@@ -5,20 +5,20 @@ from PyQt6.QtCore import QObject
 from PyQt6.QtGui import QIntValidator, QDoubleValidator
 from PyQt6.QtWidgets import QFileDialog
 
-from src.View.ResultDialog.ResultDialog import Ui_ResultDialog
-from src.View.Validators.DurationValidator import DurationValidator
-from src.View.Validators.FileInputValidator import FileInputValidator
-from src.View.MenuWidget.MenuWidget import Ui_MenuWidget
-from src.View.ErrorDialog.ErrorDialog import Ui_ErrorDialog
-from src.View.FileOptionsDialog.FileOptionsDialog import Ui_OptionsDialog as Ui_FileOptionsDialog
-from src.View.MicOptionsDialog.MicOptionsDialog import Ui_OptionsDialog as Ui_MicOptionsDialog
-from src.View.SuccessDialog.SuccessDialog import Ui_SuccessDialog
-from src.View.ProcessingDialog.ProcessingDialog import Ui_ProcessingDialog
+from skripta.src.View.ResultDialog.ResultDialog import Ui_ResultDialog
+from skripta.src.View.Validators.DurationValidator import DurationValidator
+from skripta.src.View.Validators.FileInputValidator import FileInputValidator
+from skripta.src.View.MenuWidget.MenuWidget import Ui_MenuWidget
+from skripta.src.View.ErrorDialog.ErrorDialog import Ui_ErrorDialog
+from skripta.src.View.FileOptionsDialog.FileOptionsDialog import Ui_OptionsDialog as Ui_FileOptionsDialog
+from skripta.src.View.MicOptionsDialog.MicOptionsDialog import Ui_OptionsDialog as Ui_MicOptionsDialog
+from skripta.src.View.SuccessDialog.SuccessDialog import Ui_SuccessDialog
+from skripta.src.View.ProcessingDialog.ProcessingDialog import Ui_ProcessingDialog
 
 from enum import Enum
 
-from src.Model.Utils.FileTypeUtil import FileTypeUtil
-from src.View.MainWindow import MainWindow
+from skripta.src.Model.Utils.FileTypeUtil import FileTypeUtil
+from skripta.src.View.MainWindow import MainWindow
 
 
 class View(QObject):

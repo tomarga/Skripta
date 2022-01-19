@@ -46,7 +46,7 @@ class Ui_ProcessingDialog(object):
         self.ProcessingAnimationLabel.setGeometry(QtCore.QRect(0, -10, 541, 200))
         self.ProcessingAnimationLabel.setMinimumSize(QtCore.QSize(0, 190))
         self.ProcessingAnimationLabel.setMaximumSize(QtCore.QSize(16777215, 200))
-        self.animation = QMovie("../resources/animations/loading.gif")
+        self.animation = QMovie("skripta/resources/animations/loading.gif")
         self.ProcessingAnimationLabel.setStyleSheet("QLabel#ProcessingAnimationLabel {\n"
 "    padding-right: 20px;\n"
 "    padding-bottom: 35px;\n"

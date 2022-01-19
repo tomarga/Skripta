@@ -14,7 +14,7 @@ class Ui_ErrorDialog(object):
         ErrorDialog.setObjectName("ErrorDialog")
         ErrorDialog.resize(570, 225)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../resources/icons/error.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap("skripta/resources/icons/error.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         ErrorDialog.setWindowIcon(icon)
         ErrorDialog.setAccessibleName("")
         ErrorDialog.setStyleSheet("QDialog#ErrorDialog {\n"
@@ -28,7 +28,7 @@ class Ui_ErrorDialog(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.ErrorIconLabel = QtWidgets.QLabel(ErrorDialog)
         self.ErrorIconLabel.setText("")
-        self.ErrorIconLabel.setPixmap(QtGui.QPixmap("../resources/icons/error.png"))
+        self.ErrorIconLabel.setPixmap(QtGui.QPixmap("skripta/resources/icons/error.png"))
         self.ErrorIconLabel.setScaledContents(False)
         self.ErrorIconLabel.setObjectName("ErrorIconLabel")
         self.horizontalLayout.addWidget(self.ErrorIconLabel)

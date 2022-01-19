@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'src/View/FileOptionsDialog/FileOptionsDialog.ui'
+# Form implementation generated from reading ui file 'src/View/MicOptionsDialog/MicOptionsDialog.ui'
 #
 # Created by: PyQt6 UI code generator 6.1.0
 #
@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_OptionsDialog(object):
     def setupUi(self, OptionsDialog):
         OptionsDialog.setObjectName("OptionsDialog")
-        OptionsDialog.resize(620, 735)
+        OptionsDialog.resize(620, 758)
         OptionsDialog.setStyleSheet("QDialog#OptionsDialog {\n"
 "    background-color: rgb(84, 84, 84);\n"
 "}")
@@ -40,17 +40,11 @@ class Ui_OptionsDialog(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.fileHLayout = QtWidgets.QHBoxLayout()
         self.fileHLayout.setObjectName("fileHLayout")
-        self.FileLabel = QtWidgets.QLabel(self.frame)
-        self.FileLabel.setObjectName("FileLabel")
-        self.fileHLayout.addWidget(self.FileLabel)
-        self.fileLineEdit = QtWidgets.QLineEdit(self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.fileLineEdit.sizePolicy().hasHeightForWidth())
-        self.fileLineEdit.setSizePolicy(sizePolicy)
-        self.fileLineEdit.setMaximumSize(QtCore.QSize(400, 16777215))
-        self.fileLineEdit.setStyleSheet("QLineEdit {\n"
+        self.micLabel = QtWidgets.QLabel(self.frame)
+        self.micLabel.setObjectName("micLabel")
+        self.fileHLayout.addWidget(self.micLabel)
+        self.micComboBox = QtWidgets.QComboBox(self.frame)
+        self.micComboBox.setStyleSheet("QComboBox {\n"
 "    background-color: rgb(84, 84, 84);\n"
 "    border-none;    \n"
 "    border-bottom: 0.5px solid #54a4a6;\n"
@@ -59,30 +53,39 @@ class Ui_OptionsDialog(object):
 "    color: white;\n"
 "}\n"
 "\n"
-"QLineEdit::hover {\n"
+"QComboBox::hover {\n"
 "    border-color: #63C2C4;\n"
-"}")
-        self.fileLineEdit.setText("")
-        self.fileLineEdit.setFrame(True)
-        self.fileLineEdit.setReadOnly(False)
-        self.fileLineEdit.setClearButtonEnabled(True)
-        self.fileLineEdit.setObjectName("fileLineEdit")
-        self.fileHLayout.addWidget(self.fileLineEdit)
-        self.browseFileButton = QtWidgets.QPushButton(self.frame)
-        self.browseFileButton.setMaximumSize(QtCore.QSize(30, 16777215))
-        self.browseFileButton.setAutoFillBackground(False)
-        self.browseFileButton.setStyleSheet("QPushButton {\n"
+"}\n"
+"\n"
+"QComboBox::disabled {\n"
+"    color: rgb(153, 153, 153);\n"
+"}\n"
+"\n"
+"\n"
+"/*  After dropping, the entire drop-down form style */\n"
+"QComboBox QAbstractItemView {\n"
+"    border: 1px solid white;   /*  Border of the entire drop-down form */\n"
+"    background-color: rgb(84, 84, 84);;   /*  Whole drop-down form background color */\n"
+"    color: white;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"}\n"
+"\n"
+"/*  Down pull, the entire drop-down window */\n"
+"QComboBox QAbstractItemView::item {\n"
+"    height: 25px;   /*  The height of the item (set pcomboBox-> setView (new qlistview ()); after this item works) */\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    border: none;\n"
+"    border-top: 0.5px solid rgb(81, 81, 81);\n"
+"    border-bottom: 0.5px solid rgb(81, 81, 81);\n"
+"    border-radius: 2px;\n"
 "    background-color: rgb(84, 84, 84);\n"
-"    border-color: white\n"
 "}")
-        self.browseFileButton.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../resources/icons/browse.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
-        self.browseFileButton.setIcon(icon)
-        self.browseFileButton.setAutoDefault(False)
-        self.browseFileButton.setFlat(False)
-        self.browseFileButton.setObjectName("browseFileButton")
-        self.fileHLayout.addWidget(self.browseFileButton)
+        self.micComboBox.setEditable(True)
+        self.micComboBox.setMaxVisibleItems(5)
+        self.micComboBox.setObjectName("micComboBox")
+        self.fileHLayout.addWidget(self.micComboBox)
         self.verticalLayout.addLayout(self.fileHLayout)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -118,6 +121,7 @@ class Ui_OptionsDialog(object):
 "QComboBox QAbstractItemView::item {\n"
 "    height: 70px; \n"
 "}")
+        self.apiComboBox.setEditable(False)
         self.apiComboBox.setObjectName("apiComboBox")
         self.apiComboBox.addItem("")
         self.apiComboBox.addItem("")
@@ -128,14 +132,14 @@ class Ui_OptionsDialog(object):
         self.timeHLayout = QtWidgets.QHBoxLayout()
         self.timeHLayout.setSpacing(6)
         self.timeHLayout.setObjectName("timeHLayout")
-        self.FromLabel = QtWidgets.QLabel(self.frame)
-        self.FromLabel.setMinimumSize(QtCore.QSize(125, 0))
-        self.FromLabel.setObjectName("FromLabel")
-        self.timeHLayout.addWidget(self.FromLabel)
-        self.FromLineEdit = QtWidgets.QLineEdit(self.frame)
-        self.FromLineEdit.setEnabled(True)
-        self.FromLineEdit.setMaximumSize(QtCore.QSize(61, 16777215))
-        self.FromLineEdit.setStyleSheet("QLineEdit {\n"
+        self.durationLabel = QtWidgets.QLabel(self.frame)
+        self.durationLabel.setMinimumSize(QtCore.QSize(125, 0))
+        self.durationLabel.setObjectName("durationLabel")
+        self.timeHLayout.addWidget(self.durationLabel)
+        self.durationLineEdit = QtWidgets.QLineEdit(self.frame)
+        self.durationLineEdit.setEnabled(True)
+        self.durationLineEdit.setMaximumSize(QtCore.QSize(61, 16777215))
+        self.durationLineEdit.setStyleSheet("QLineEdit {\n"
 "    background-color: rgb(84, 84, 84);\n"
 "    border-none;    \n"
 "    border-bottom: 0.5px solid #54a4a6;\n"
@@ -147,39 +151,11 @@ class Ui_OptionsDialog(object):
 "QLineEdit::hover {\n"
 "    border-color: #63C2C4;\n"
 "}")
-        self.FromLineEdit.setInputMethodHints(QtCore.Qt.InputMethodHint.ImhTime)
-        self.FromLineEdit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.FromLineEdit.setDragEnabled(False)
-        self.FromLineEdit.setObjectName("FromLineEdit")
-        self.timeHLayout.addWidget(self.FromLineEdit)
-        self.DashLabel = QtWidgets.QLabel(self.frame)
-        self.DashLabel.setMaximumSize(QtCore.QSize(20, 16777215))
-        self.DashLabel.setStyleSheet("QLabel#DashLabel {\n"
-"    padding-left: 5px;\n"
-"}\n"
-"    ")
-        self.DashLabel.setObjectName("DashLabel")
-        self.timeHLayout.addWidget(self.DashLabel)
-        self.ToLineEdit = QtWidgets.QLineEdit(self.frame)
-        self.ToLineEdit.setEnabled(True)
-        self.ToLineEdit.setMaximumSize(QtCore.QSize(61, 16777215))
-        self.ToLineEdit.setStyleSheet("QLineEdit {\n"
-"    background-color: rgb(84, 84, 84);\n"
-"    border-none;    \n"
-"    border-bottom: 0.5px solid #54a4a6;\n"
-"    border-radius: 0px;\n"
-"    padding: 2px 2px 2px 2px;\n"
-"    color: white;\n"
-"}\n"
-"\n"
-"QLineEdit::hover {\n"
-"    border-color: #63C2C4;\n"
-"}")
-        self.ToLineEdit.setInputMethodHints(QtCore.Qt.InputMethodHint.ImhTime)
-        self.ToLineEdit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.ToLineEdit.setDragEnabled(False)
-        self.ToLineEdit.setObjectName("ToLineEdit")
-        self.timeHLayout.addWidget(self.ToLineEdit)
+        self.durationLineEdit.setInputMethodHints(QtCore.Qt.InputMethodHint.ImhTime)
+        self.durationLineEdit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.durationLineEdit.setDragEnabled(False)
+        self.durationLineEdit.setObjectName("durationLineEdit")
+        self.timeHLayout.addWidget(self.durationLineEdit)
         self.verticalLayout.addLayout(self.timeHLayout)
         self.verticalLayout_4.addWidget(self.frame)
         self.label_3 = QtWidgets.QLabel(OptionsDialog)
@@ -204,6 +180,7 @@ class Ui_OptionsDialog(object):
         self.noiseTypeLabel.setObjectName("noiseTypeLabel")
         self.noiseHLayout.addWidget(self.noiseTypeLabel)
         self.noiseTypeComboBox = QtWidgets.QComboBox(self.frame_3)
+        self.noiseTypeComboBox.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.PreventContextMenu)
         self.noiseTypeComboBox.setStyleSheet("QComboBox {\n"
 "    background-color: rgb(84, 84, 84);\n"
 "    border-none;    \n"
@@ -433,11 +410,49 @@ class Ui_OptionsDialog(object):
 "    border-color: white\n"
 "}")
         self.browseGrammarButton.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("skripta/resources/icons/browse.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.browseGrammarButton.setIcon(icon)
         self.browseGrammarButton.setAutoDefault(False)
         self.browseGrammarButton.setObjectName("browseGrammarButton")
         self.horizontalLayout_6.addWidget(self.browseGrammarButton)
         self.verticalLayout_2.addLayout(self.horizontalLayout_6)
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.hotwordLabel = QtWidgets.QLabel(self.frame_2)
+        self.hotwordLabel.setObjectName("hotwordLabel")
+        self.horizontalLayout_8.addWidget(self.hotwordLabel)
+        self.hotwordsLineEdit = QtWidgets.QLineEdit(self.frame_2)
+        self.hotwordsLineEdit.setMinimumSize(QtCore.QSize(400, 0))
+        self.hotwordsLineEdit.setMaximumSize(QtCore.QSize(400, 16777215))
+        self.hotwordsLineEdit.setStyleSheet("QLineEdit {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-none;    \n"
+"    border-bottom: 0.5px solid #54a4a6;\n"
+"    border-radius: 0px;\n"
+"    padding: 2px 2px 2px 2px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QLineEdit::hover {\n"
+"    border-color:#63C2C4;\n"
+"}")
+        self.hotwordsLineEdit.setClearButtonEnabled(True)
+        self.hotwordsLineEdit.setObjectName("hotwordsLineEdit")
+        self.horizontalLayout_8.addWidget(self.hotwordsLineEdit)
+        self.browseHotwordsButton = QtWidgets.QPushButton(self.frame_2)
+        self.browseHotwordsButton.setEnabled(True)
+        self.browseHotwordsButton.setMaximumSize(QtCore.QSize(30, 16777215))
+        self.browseHotwordsButton.setStyleSheet("QPushButton {\n"
+"    background-color: rgb(84, 84, 84);\n"
+"    border-color: white\n"
+"}")
+        self.browseHotwordsButton.setText("")
+        self.browseHotwordsButton.setIcon(icon)
+        self.browseHotwordsButton.setAutoDefault(False)
+        self.browseHotwordsButton.setObjectName("browseHotwordsButton")
+        self.horizontalLayout_8.addWidget(self.browseHotwordsButton)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_8)
         self.verticalLayout_4.addWidget(self.frame_2)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
         self.verticalLayout_4.addItem(spacerItem)
@@ -492,7 +507,7 @@ class Ui_OptionsDialog(object):
         self.CancelButton.setObjectName("CancelButton")
         self.buttonBox.addWidget(self.CancelButton)
         self.OKButton = QtWidgets.QPushButton(OptionsDialog)
-        self.OKButton.setEnabled(False)
+        self.OKButton.setEnabled(True)
         self.OKButton.setMinimumSize(QtCore.QSize(135, 30))
         self.OKButton.setMaximumSize(QtCore.QSize(16777213, 16777215))
         self.OKButton.setStyleSheet("QPushButton#OKButton {\n"
@@ -531,21 +546,18 @@ class Ui_OptionsDialog(object):
         _translate = QtCore.QCoreApplication.translate
         OptionsDialog.setWindowTitle(_translate("OptionsDialog", "Opcije"))
         self.label.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:700; color:#ffffff;\">Osnovne postavke</span></p></body></html>"))
-        self.FileLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Datoteka: </span></p></body></html>"))
+        self.micLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">MIkrofon:</span></p></body></html>"))
         self.apiLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Svaki poslužitelj podržava neke od niže navedenih opcija.</p><p>Sphinx API radi offline.</p></body></html>"))
         self.apiLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Poslužitelj: </span></p></body></html>"))
         self.apiComboBox.setItemText(0, _translate("OptionsDialog", "Google (dev)"))
         self.apiComboBox.setItemText(1, _translate("OptionsDialog", "Google Cloud"))
         self.apiComboBox.setItemText(2, _translate("OptionsDialog", "PocketSphinx"))
         self.apiComboBox.setItemText(3, _translate("OptionsDialog", "Houndify"))
-        self.FromLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Vremenski interval:</span></p></body></html>"))
-        self.FromLineEdit.setInputMask(_translate("OptionsDialog", "99:99:99"))
-        self.FromLineEdit.setText(_translate("OptionsDialog", "00:00:00"))
-        self.FromLineEdit.setPlaceholderText(_translate("OptionsDialog", "00:00"))
-        self.DashLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">   -</span></p></body></html>"))
-        self.ToLineEdit.setInputMask(_translate("OptionsDialog", "99:99:99"))
-        self.ToLineEdit.setText(_translate("OptionsDialog", "00:00:00"))
-        self.ToLineEdit.setPlaceholderText(_translate("OptionsDialog", "00:00"))
+        self.durationLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Slušanje će se prekinuti nakon navedenog vremena (HH:MM:SS).</p><p>Slušanje može trajati od 5s do 1h.</p></body></html>"))
+        self.durationLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Trajanje govora:</span></p></body></html>"))
+        self.durationLineEdit.setInputMask(_translate("OptionsDialog", "99:99:99"))
+        self.durationLineEdit.setText(_translate("OptionsDialog", "00:00:05"))
+        self.durationLineEdit.setPlaceholderText(_translate("OptionsDialog", "00:00"))
         self.label_3.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:700; color:#ffffff;\">Postavke zvuka</span></p></body></html>"))
         self.noiseTypeLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Vrijednosti više od praga se smatraju govorom, a niže tišinom.</p><p>Prag se može odrediti dinamički, s ili bez početne vrijednosti, ili postaviti na fiksnu vrijednost.</p></body></html>"))
         self.noiseTypeLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Prag pozadinske buke:</span></p></body></html>"))
@@ -565,6 +577,8 @@ class Ui_OptionsDialog(object):
         self.sensitivityLineEdit.setPlaceholderText(_translate("OptionsDialog", "0-1"))
         self.grammarLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Datoteka u kojoj je definirana FSG ili JSGF gramatika.</p><p>Unos gramatike će se ignorirati ako su definirane ključne riječi.</p></body></html>"))
         self.grammarLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Gramatika:</span></p></body></html>"))
+        self.hotwordLabel.setToolTip(_translate("OptionsDialog", "<html><head/><body><p>Datoteka koja opisuje model za prepoznavanje riječi koja će označavati početak govora.</p></body></html>"))
+        self.hotwordLabel.setText(_translate("OptionsDialog", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Okidač:</span></p></body></html>"))
         self.resetButton.setText(_translate("OptionsDialog", "Reset"))
         self.CancelButton.setText(_translate("OptionsDialog", "Odustani"))
         self.OKButton.setText(_translate("OptionsDialog", "OK"))
