@@ -163,7 +163,7 @@ class Recognizer:
 
         env = None
         try:
-            env = open(ROOT_DIRECTORY.__str__() + "/env.json", 'r')
+            env = open(ROOT_DIRECTORY.parent.__str__() + "/env.json", 'r')
         except OSError as e:
             sys.stderr.write("OSError - env file: " + e.__str__())
 
@@ -224,7 +224,7 @@ class Recognizer:
                 recognizer.pause_threshold = 300  # stop listening after 5 mins of silence
 
                 # setup hotwords conf
-                snowboyDirectory = ROOT_DIRECTORY.__str__() + '/venv/lib/python3.8/site-packages/snowboy-1.3.0-py3.8.egg/snowboy'
+                snowboyDirectory = ROOT_DIRECTORY.parent.__str__() + '/venv/lib/python3.8/site-packages/snowboy-1.3.0-py3.8.egg/snowboy'
                 hotwordsConf = (snowboyDirectory, [self.micOptions.hotwords]) if self.micOptions.hotwords is not None else None
 
                 # trigger timeout error if no speech is detected for 5 mins
