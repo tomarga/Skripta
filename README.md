@@ -18,7 +18,7 @@ user@comp:~$  ./transkripta
 ### Pokretanje *source* koda
 - klonirati projekt
 - instalirati ```python 3.8.10``` (ili noviji) i ```pip```
-- kreirati python virtualno okruzenje (*venv*)
+- kreirati python virtualno okruženje (*venv*)
 - instalirati pakete iz ```requirements.txt``` datoteke
 - pokrenuti ```skripta/src/main.py``` skriptu
 ***
