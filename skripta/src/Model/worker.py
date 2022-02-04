@@ -1,5 +1,4 @@
 import argparse
-import sys
 
 from skripta.src.Model.Enums.EnergyThresholdOption import EnergyThresholdOption
 from skripta.src.Model.Enums.API import API
@@ -84,7 +83,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     options = getTranscriptionOptions()
-
     worker = Recognizer(*options)
     worker.run()
-

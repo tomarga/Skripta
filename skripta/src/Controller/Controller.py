@@ -335,6 +335,21 @@ class Controller:
 
         self.view.openDialog(self.view.DialogType.PROCESSING)
 
+    def getSeconds(self, input: str):
+        """
+        Helper method, retrieves the number of seconds from given text input.
+        :param input: String in format 'HH:MM:SS'
+        :return: Number od seconds
+        """
+
+        seconds = 0
+
+        seconds += datetime.datetime.strptime(input, '%H:%M:%S').hour * 3600
+        seconds += datetime.datetime.strptime(input, '%H:%M:%S').minute * 60
+        seconds += datetime.datetime.strptime(input, '%H:%M:%S').second
+
+        return seconds
+
     def getFileWorkerArguments(self):
         """
         Creates a list of command line inputs for worker process in case of a file input.
@@ -350,12 +365,12 @@ class Controller:
 
         # from
         fromInput = self.view.fileOptionsDialogUI.FromLineEdit.text()
-        offset = datetime.datetime.strptime(fromInput, '%H:%M:%S').second
+        offset = self.getSeconds(fromInput)
         args.extend(('-o', offset.__str__()))
 
         # to
         toInput = self.view.fileOptionsDialogUI.ToLineEdit.text()
-        to = datetime.datetime.strptime(toInput, '%H:%M:%S').second
+        to = self.getSeconds(toInput)
         duration = to - offset
         args.extend(('-d', duration.__str__()))
 
@@ -379,7 +394,7 @@ class Controller:
 
         # duration
         durationInput = self.view.micOptionsDialogUI.durationLineEdit.text()
-        duration = datetime.datetime.strptime(durationInput, '%H:%M:%S').second
+        duration = self.getSeconds(durationInput)
         args.extend(('-st', duration.__str__()))
 
         # hotwords
